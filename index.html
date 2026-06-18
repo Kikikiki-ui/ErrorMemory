@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Writing Coach</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #9370DB;
+            min-height: 100vh;
+            padding: 20px;
+            color: #2c2c2c;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: none;
+        }
+
+        h1 {
+            color: #6c3fbf;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            font-size: 80px;
+            margin: 10px 0;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(108, 63, 191, 0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: none;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #6c3fbf 0%, #9d5ce8 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(108, 63, 191, 0.4);
+        }
+
+        .button-outline {
+            background: white;
+            color: #6c3fbf;
+            border: 2px solid #6c3fbf;
+        }
+
+        .button-level {
+            background: white;
+            color: #6c3fbf;
+            border: 2px solid #e0e0e0;
+            padding: 12px 20px;
+            font-size: 1rem;
+            width: 100%;
+            margin: 8px 0;
+            text-align: left;
+        }
+
+        .button-level.active {
+            background: #6c3fbf;
+            color: white;
+            border-color: #6c3fbf;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .topic-tile {
+            padding: 20px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .topic-tile:hover {
+            background: #6c3fbf;
+            color: white;
+            border-color: #6c3fbf;
+        }
+
+        .quiz-choice {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f0f4ff;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .quiz-choice:hover,
+        .quiz-choice.selected {
+            background: #6c3fbf;
+            color: white;
+            border-color: #6c3fbf;
+        }
+
+        .quiz-choice input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        .prompt-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 5px solid #6c3fbf;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .prompt-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .badge-discussion { background: #27ae60; }
+        .badge-advantages { background: #e67e22; }
+        .badge-problem { background: #e74c3c; }
+        .badge-agree { background: #34495e; }
+        .badge-report { background: #2980b9; }
+        .badge-foundation { background: #16a085; }
+        .badge-intermediate { background: #c0392b; }
+        .badge-advanced { background: #8e44ad; }
+
+        .visualization {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .content-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 5px solid #6c3fbf;
+        }
+
+        .content-box h3 {
+            color: #6c3fbf;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #6c3fbf;
+        }
+
+        .word-counter {
+            text-align: right;
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .word-counter.warning {
+            color: #ef4444;
+        }
+
+        .results-section {
+            display: none;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #6c3fbf, #9d5ce8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #6c3fbf;
+        }
+
+        .metric-box h4 {
+            color: #6c3fbf;
+            margin-bottom: 5px;
+        }
+
+        .metric-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #6c3fbf;
+        }
+
+        .suggestions-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .suggestions-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            border-radius: 4px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .back-button {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="assessmentScreen">
+            <header>
+                <div class="logo">🦋</div>
+                <h1>IELTS Writing Coach</h1>
+                <p>Master IELTS writing with targeted practice and detailed feedback.</p>
+            </header>
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">Quick Assessment</h2>
+                <div id="quizContainer">
+                    <h3 id="questionTitle">Question 1/2: What are your main writing challenges?</h3>
+                    <div id="optionsContainer"></div>
+                    <p style="color: #ef4444; font-size: 0.9rem; margin-top: 10px;">* Select at least 3 areas</p>
+                    <button class="button" onclick="proceedToNextQuestion()" style="width: 100%; margin-top: 20px;">Continue</button>
+                </div>
+                <div id="assessmentResult" class="hidden" style="text-align: center;">
+                    <h3>✅ Assessment Complete</h3>
+                    <p id="resultMessage" style="margin: 15px 0; font-size: 1.1rem;"></p>
+                    <button class="button" onclick="enterMainMenu()">Begin Training →</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mainMenu" class="hidden">
+            <header>
+                <div class="logo">🦋</div>
+                <h1>IELTS Writing Coach</h1>
+                <p>Select your practice level and task type.</p>
+            </header>
+            <div class="card" style="text-align: center;">
+                <h2 style="margin-bottom: 20px;">Choose Your Level</h2>
+                <button class="button-level" onclick="selectLevel('foundation')">🌱 Foundation (IELTS 5.0-6.0)</button>
+                <button class="button-level" onclick="selectLevel('intermediate')">📈 Intermediate (IELTS 6.0-7.0)</button>
+                <button class="button-level" onclick="selectLevel('advanced')">⭐️ Advanced (IELTS 7.0-8.0)</button>
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+                <h2 style="margin: 20px 0;">Select Task Type</h2>
+                <button class="button" onclick="selectTaskType(1)">Task 1 (Academic)</button>
+                <button class="button" onclick="selectTaskType(2)">Task 2 (Essay)</button>
+                <br><br>
+                <button class="button button-outline" onclick="openProgressTracker()">📊 Progress Tracker</button>
+            </div>
+        </div>
+
+        <div id="topicsScreen" class="hidden">
+            <button class="back-button" onclick="returnToMenu()">← Back</button>
+            <div class="card">
+                <h2>Select Topic Area</h2>
+                <div class="grid" id="topicsContainer"></div>
+            </div>
+        </div>
+
+        <div id="promptsScreen" class="hidden">
+            <button class="back-button" onclick="backToTopics()">← Back to Topics</button>
+            <div class="card">
+                <h2 id="topicTitle">Topic Prompts</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Select a prompt to practice.</p>
+                <div id="promptsContainer"></div>
+            </div>
+        </div>
+
+        <div id="writingScreen" class="hidden">
+            <button class="back-button" onclick="backToPrompts()">← Back to Prompts</button>
+            <div class="card" id="preparationContent"></div>
+            <div class="card">
+                <h2>Writing Practice</h2>
+                <div style="background: #fef3c7; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.95rem;">
+                    <strong>📝 Your Prompt:</strong> <span id="promptDisplay"></span>
+                </div>
+                <textarea id="essayField" placeholder="Write your essay here..." oninput="updateWordCount()"></textarea>
+                <div class="word-counter" id="wordCounter">Words: <span id="currentWordCount">0</span> / <span id="minimumWords">150</span></div>
+                <button class="button" style="width: 100%;" onclick="evaluateEssay()">⚡️ Submit & Get Feedback</button>
+            </div>
+            <div class="card results-section" id="feedbackSection">
+                <div class="score-display">
+                    <div>Your Band Score</div>
+                    <div class="score-number" id="bandScore">0.0</div>
+                </div>
+                <div class="metrics-grid" id="metricsContainer"></div>
+                <div id="suggestionsContainer"></div>
+            </div>
+        </div>
+
+        <div id="progressScreen" class="hidden">
+            <button class="back-button" onclick="returnToMenu()">← Back</button>
+            <div class="card">
+                <h2>📊 Your Progress</h2>
+                <p style="margin-bottom: 15px;">Performance summary:</p>
+                <div id="progressList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DIFFICULTY_LEVELS = {
+            foundation: { name: 'Foundation', minWords: 150, maxWords: 200, minBand: 5.0, maxBand: 6.0 },
+            intermediate: { name: 'Intermediate', minWords: 200, maxWords: 250, minBand: 6.0, maxBand: 7.0 },
+            advanced: { name: 'Advanced', minWords: 250, maxWords: 350, minBand: 7.0, maxBand: 8.0 }
+        };
+
+        let currentLevel = 'intermediate';
+        let currentTaskType = null;
+        let currentTopic = null;
+        let currentPrompt = null;
+        let assessmentResponses = [];
+
+        const topicLibrary = {
+            medicine: {
+                name: "💊 Medicine & Healthcare",
+                taskType: 2,
+                prompts: [
+                    {
+                        type: "Discussion",
+                        text: "Some people prefer modern medicine, while others prefer traditional medicine. Discuss both views and give your opinion."
+                    },
+                    {
+                        type: "Advantages",
+                        text: "What are the advantages and disadvantages of modern vs traditional medicine?"
+                    }
+                ],
+                backgroundContent: [
+                    "Modern medicine relies on advanced technology, clinical trials, and pharmaceuticals. It offers rapid treatment and precise diagnostics. Yet it often treats symptoms rather than root causes and carries high costs. Traditional medicine emphasizes prevention and holistic care using natural remedies. It works slowly but has fewer side effects. Each has distinct advantages depending on the condition.",
+                    "Combining both systems creates better patient outcomes. Modern medicine handles emergencies and complex situations well, while traditional medicine shines in chronic pain and preventive care. Consulting practitioners from both fields ensures safe, balanced treatment."
+                ],
+                keyPhrases: [
+                    { en: "relies on advanced technology", ru: "опирается на передовые технологии" },
+                    { en: "rapid treatment", ru: "быстрое лечение" },
+                    { en: "holistic approach", ru: "комплексный подход" },
+                    { en: "preventive care", ru: "профилактическое лечение" },
+                    { en: "symptom management", ru: "лечение симптомов" },
+                    { en: "chronic conditions", ru: "хронические заболевания" }
+                ]
+            },
+            environment: {
+                name: "🌍 Environment & Climate",
+                taskType: 2,
+                prompts: [
+                    {
+                        type: "Discussion",
+                        text: "Some think environmental problems are too large for individuals to solve. Others believe individuals can make a difference. Discuss both views."
+                    },
+                    {
+                        type: "Problem",
+                        text: "What are the main causes of climate change and what solutions can be implemented?"
+                    }
+                ],
+                backgroundContent: [
+                    "Climate change is driven by greenhouse gas emissions from industry and agriculture. Rising temperatures cause extreme weather, melting ice caps, and ecosystem damage. While governments must enforce regulations on carbon emissions, individuals can contribute through sustainable choices. Recycling, reducing energy consumption, and supporting green businesses create collective impact.",
+                    "Effective climate action requires multi-level efforts. Governments invest in renewable energy, enforce environmental standards, and support green infrastructure. Businesses transition to sustainable practices. Individuals reduce carbon footprints through conscious consumption. Educational awareness accelerates cultural shifts toward environmental responsibility."
+                ],
+                keyPhrases: [
+                    { en: "climate change", ru: "изменение климата" },
+                    { en: "greenhouse gases", ru: "парниковые газы" },
+                    { en: "renewable energy", ru: "возобновляемая энергия" },
+                    { en: "sustainable practices", ru: "устойчивые методы" },
+                    { en: "carbon footprint", ru: "углеродный след" },
+                    { en: "ecosystem damage", ru: "ущерб экосистеме" }
+                ]
+            },
+            crime: {
+                name: "⚖️ Law & Justice",
+                taskType: 2,
+                prompts: [
+                    {
+                        type: "Discussion",
+                        text: "Some believe longer prison sentences reduce crime. Others support rehabilitation approaches. Discuss both views."
+                    },
+                    {
+                        type: "Problem",
+                        text: "Why is crime increasing in cities and what solutions can address this issue?"
+                    }
+                ],
+                backgroundContent: [
+                    "Crime persists despite punitive measures. Research shows lengthy sentences don't significantly deter offenders. Root causes like poverty, lack of education, and limited opportunities drive criminal behavior. Rehabilitation programs, vocational training, and community support prove more effective long-term. Prevention through education and early intervention reduces crime rates.",
+                    "Modern justice systems combine deterrence with rehabilitation. Community service and educational programs help offenders reintegrate. Investment in youth programs, mental health services, and economic opportunities addresses underlying causes. Evidence shows comprehensive approaches reduce recidivism better than incarceration alone."
+                ],
+                keyPhrases: [
+                    { en: "deterrent effect", ru: "сдерживающий эффект" },
+                    { en: "rehabilitation", ru: "реабилитация" },
+                    { en: "root causes", ru: "коренные причины" },
+                    { en: "recidivism", ru: "рецидивизм" },
+                    { en: "vocational training", ru: "профессиональное обучение" },
+                    { en: "community support", ru: "поддержка сообщества" }
+                ]
+            },
+            family: {
+                name: "👨‍👩‍👧 Family & Society",
+                taskType: 2,
+                prompts: [
+                    {
+                        type: "Discussion",
+                        text: "Parents or schools - who should teach children about values? Discuss both perspectives."
+                    },
+                    {
+                        type: "Agree",
+                        text: "Families spend less time together. Is this negative? Give your opinion."
+                    }
+                ],
+                backgroundContent: [
+                    "Family is the foundation of social development. Parents instill core values through daily interaction. Children learn respect, responsibility, and empathy at home. Schools reinforce these values through formal education. Both environments shape character. Today's fast-paced world reduces family time, affecting childhood development and social skills.",
+                    "Strong families and schools work together for optimal child development. Parents provide emotional foundation and moral grounding. Teachers develop academic skills and social awareness. Consistent values from both settings create well-rounded individuals. Modern families must prioritize quality time despite busy schedules to maintain strong bonds."
+                ],
+                keyPhrases: [
+                    { en: "moral foundation", ru: "моральная основа" },
+                    { en: "social values", ru: "социальные ценности" },
+                    { en: "family bonding", ru: "семейная связь" },
+                    { en: "childhood development", ru: "развитие ребенка" },
+                    { en: "parental guidance", ru: "родительское руководство" },
+                    { en: "well-rounded person", ru: "всесторонне развитый человек" }
+                ]
+            },
+            technology: {
+                name: "💻 Technology & Society",
+                taskType: 2,
+                prompts: [
+                    {
+                        type: "Discussion",
+                        text: "Technology connects people globally but reduces face-to-face interaction. Discuss both effects."
+                    },
+                    {
+                        type: "Problem",
+                        text: "What problems does excessive technology use cause and how can society address them?"
+                    }
+                ],
+                backgroundContent: [
+                    "Technology changed how we communicate and share information. Social media lets people connect across the world instantly. Remote work offers more flexibility. Yet excessive screen time damages face-to-face relationships. Depression, insomnia, and social anxiety rise with overuse. Finding a healthy balance matters.",
+                    "Smart tech use requires setting limits. Schools need digital literacy programs. Families should have tech-free times and outdoor activities. Companies must respect work boundaries. Technology works best when it supports real relationships and personal health."
+                ],
+                keyPhrases: [
+                    { en: "digital transformation", ru: "цифровая трансформация" },
+                    { en: "screen addiction", ru: "зависимость от экрана" },
+                    { en: "social isolation", ru: "социальная изоляция" },
+                    { en: "digital literacy", ru: "цифровая грамотность" },
+                    { en: "mental well-being", ru: "психическое благополучие" },
+                    { en: "balanced lifestyle", ru: "сбалансированный образ жизни" }
+                ]
+            },
+            education: {
+                name: "📚 Education & Learning",
+                taskType: 2,
+                prompts: [
+                    {
+                        type: "Discussion",
+                        text: "Online vs traditional education - which is better? Discuss advantages of both."
+                    },
+                    {
+                        type: "Problem",
+                        text: "Why do students struggle with motivation and what can improve engagement?"
+                    }
+                ],
+                backgroundContent: [
+                    "Traditional education builds community and direct mentorship. Classrooms enable peer interaction and immediate feedback. Online learning offers flexibility and accessibility. Students learn at their own pace with diverse resources. Hybrid models combine benefits of both. Effective education adapts to individual learning styles and ensures comprehensive skill development.",
+                    "Motivation challenges stem from various sources. Clear learning goals, engaging content, and supportive teachers increase participation. Student autonomy and choice boost motivation. Relevance to career goals matters significantly. Assessment methods should evaluate growth beyond test scores. Quality education develops critical thinking, creativity, and collaboration skills."
+                ],
+                keyPhrases: [
+                    { en: "learning outcomes", ru: "результаты обучения" },
+                    { en: "student engagement", ru: "вовлеченность студентов" },
+                    { en: "critical thinking", ru: "критическое мышление" },
+                    { en: "collaborative learning", ru: "совместное обучение" },
+                    { en: "skill development", ru: "развитие навыков" },
+                    { en: "educational equity", ru: "образовательное равенство" }
+                ]
+            },
+            chartBar: {
+                name: "📊 Bar Chart",
+                taskType: 1,
+                prompts: [
+                    {
+                        type: "Report",
+                        text: "The bar chart shows transportation usage in London (1990-2010). Summarize the main trends."
+                    }
+                ],
+                visualType: "bar",
+                backgroundContent: [
+                    "London transportation data reveals significant patterns. Car usage remained dominant throughout the period despite fluctuations. In 1990, 45% used cars, increasing to 52% by 2000, then declining to 48% in 2010. Bus usage decreased from 30% to 25% to 28%. Train usage showed steady growth from 15% to 20%. Overall, cars dominated despite environmental concerns and public transport improvements."
+                ],
+                keyPhrases: [
+                    { en: "transportation trends", ru: "тенденции в транспорте" },
+                    { en: "usage patterns", ru: "модели использования" },
+                    { en: "steady growth", ru: "устойчивый рост" },
+                    { en: "fluctuations", ru: "колебания" },
+                    { en: "significant decline", ru: "значительное снижение" }
+                ]
+            },
+            chartLine: {
+                name: "📈 Line Graph",
+                taskType: 1,
+                prompts: [
+                    {
+                        type: "Report",
+                        text: "The line graph shows tourist arrivals in European countries (2010-2020). Describe the trends."
+                    }
+                ],
+                visualType: "line",
+                backgroundContent: [
+                    "European tourism data shows three distinct phases. From 2010-2018, all three countries experienced steady growth. France led consistently, growing from 80 to 92 million visitors. Spain showed moderate growth patterns. Italy maintained steady visitor numbers. After 2018, a sharp decline occurred in 2020, likely due to global pandemic travel restrictions. Recovery prospects depend on healthcare and economic stability."
+                ],
+                keyPhrases: [
+                    { en: "growth trajectory", ru: "траектория роста" },
+                    { en: "peak period", ru: "период пика" },
+                    { en: "decline phase", ru: "фаза спада" },
+                    { en: "visitor numbers", ru: "количество посетителей" },
+                    { en: "recovery trends", ru: "тенденции восстановления" }
+                ]
+            },
+            chartPie: {
+                name: "🥧 Pie Chart",
+                taskType: 1,
+                prompts: [
+                    {
+                        type: "Report",
+                        text: "The pie charts compare energy sources (2000 vs 2020). Summarize the shifts."
+                    }
+                ],
+                visualType: "pie",
+                backgroundContent: [
+                    "Energy production underwent major transformation over 20 years. In 2000, coal dominated at 40%, followed by natural gas at 30%, nuclear at 20%, and renewables at 10%. By 2020, coal declined to 25%, natural gas remained at 30%, nuclear stayed at 20%, and renewables grew significantly to 25%. This shift reflects environmental awareness and renewable technology investments. Future projections expect renewables to increase further."
+                ],
+                keyPhrases: [
+                    { en: "energy sources", ru: "источники энергии" },
+                    { en: "renewable shift", ru: "сдвиг к возобновляемым источникам" },
+                    { en: "fossil fuels", ru: "ископаемые виды топлива" },
+                    { en: "sustainability", ru: "устойчивость" },
+                    { en: "production capacity", ru: "производственная мощность" }
+                ]
+            },
+            chartTable: {
+                name: "📋 Data Table",
+                taskType: 1,
+                prompts: [
+                    {
+                        type: "Report",
+                        text: "The table shows average salaries across professions in three cities (2023). Compare the data."
+                    }
+                ],
+                visualType: "table",
+                backgroundContent: [
+                    "Salary data reveals geographic and professional disparities. New York offers highest salaries across all professions: lawyers earn $9,000/month, doctors $8,500, engineers $7,500, teachers $4,500, nurses $5,500. London shows moderate salaries: lawyers $7,500, doctors $7,000. Tokyo offers lower salaries: lawyers $6,000, doctors $5,500. Geographic location and cost of living significantly impact compensation despite similar professional roles."
+                ],
+                keyPhrases: [
+                    { en: "salary comparison", ru: "сравнение зарплат" },
+                    { en: "geographic variation", ru: "географические различия" },
+                    { en: "professional hierarchy", ru: "профессиональная иерархия" },
+                    { en: "cost of living", ru: "стоимость жизни" },
+                    { en: "income disparities", ru: "различия в доходах" }
+                ]
+            }
+        };
+
+        const assessmentQuestions = [
+            {
+                question: "What are your main writing challenges?",
+                options: [
+                    "Grammar and sentence structure",
+                    "Vocabulary range",
+                    "Organizing ideas",
+                    "Punctuation",
+                    "Time management",
+                    "Coherence between paragraphs"
+                ]
+            },
+            {
+                question: "What is your current English level?",
+                options: [
+                    "Beginner (A1-A2)",
+                    "Elementary (B1)",
+                    "Intermediate (B2)",
+                    "Upper-Intermediate (B2+)",
+                    "Advanced (C1)"
+                ]
+            }
+        ];
+
+        function initializeApp() {
+            displayAssessmentQuestion(0);
+        }
+
+        function displayAssessmentQuestion(questionIndex) {
+            const question = assessmentQuestions[questionIndex];
+            document.getElementById('questionTitle').innerHTML = `Question ${questionIndex + 1}/2: ${question.question}`;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const label = document.createElement('label');
+                label.className = 'quiz-choice';
+                label.innerHTML = `
+                    <input type="checkbox" value="${option}" onchange="toggleOption(this, ${questionIndex})">
+                    <span>${option}</span>
+                `;
+                optionsContainer.appendChild(label);
+            });
+        }
+
+        function toggleOption(checkbox, questionIndex) {
+            const selected = checkbox.parentElement;
+            if (checkbox.checked) {
+                selected.classList.add('selected');
+            } else {
+                selected.classList.remove('selected');
+            }
+        }
+
+        function proceedToNextQuestion() {
+            const checkboxes = document.querySelectorAll('#optionsContainer input:checked');
+            if (checkboxes.length < 3) {
+                alert('Please select at least 3 areas');
+                return;
+            }
+            
+            assessmentResponses = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (assessmentResponses.length > 0) {
+                document.getElementById('quizContainer').classList.add('hidden');
+                document.getElementById('assessmentResult').classList.remove('hidden');
+                document.getElementById('resultMessage').textContent = `Great! You've identified your focus areas. Let's practice with targeted exercises.`;
+            }
+        }
+
+        function enterMainMenu() {
+            document.getElementById('assessmentScreen').classList.add('hidden');
+            document.getElementById('mainMenu').classList.remove('hidden');
+        }
+
+        function selectLevel(level) {
+            currentLevel = level;
+            const buttons = document.querySelectorAll('.button-level');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateWordCountDisplay();
+        }
+
+        function selectTaskType(taskType) {
+            currentTaskType = taskType;
+            displayTopics();
+        }
+
+        function displayTopics() {
+            const topicsContainer = document.getElementById('topicsContainer');
+            topicsContainer.innerHTML = '';
+            
+            Object.keys(topicLibrary).forEach(key => {
+                const topic = topicLibrary[key];
+                if (topic.taskType === currentTaskType) {
+                    const tile = document.createElement('div');
+                    tile.className = 'topic-tile';
+                    tile.innerHTML = topic.name;
+                    tile.onclick = () => selectTopic(key);
+                    topicsContainer.appendChild(tile);
+                }
+            });
+            
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('topicsScreen').classList.remove('hidden');
+        }
+
+        function selectTopic(topicKey) {
+            currentTopic = topicKey;
+            displayPrompts();
+        }
+
+        function displayPrompts() {
+            const topic = topicLibrary[currentTopic];
+            document.getElementById('topicTitle').textContent = topic.name;
+            const promptsContainer = document.getElementById('promptsContainer');
+            promptsContainer.innerHTML = '';
+            
+            topic.prompts.forEach((prompt, index) => {
+                const promptDiv = document.createElement('div');
+                promptDiv.className = 'prompt-item';
+                const badgeClass = `badge-${prompt.type.toLowerCase()}`;
+                promptDiv.innerHTML = `
+                    <span class="badge ${badgeClass}">${prompt.type}</span>
+                    <p>${prompt.text}</p>
+                `;
+                promptDiv.onclick = () => selectPrompt(index);
+                promptsContainer.appendChild(promptDiv);
+            });
+            
+            document.getElementById('topicsScreen').classList.add('hidden');
+            document.getElementById('promptsScreen').classList.remove('hidden');
+        }
+
+        function selectPrompt(promptIndex) {
+            currentPrompt = promptIndex;
+            prepareWritingScreen();
+        }
+
+        function prepareWritingScreen() {
+            const topic = topicLibrary[currentTopic];
+            const prompt = topic.prompts[currentPrompt];
+            
+            document.getElementById('promptDisplay').textContent = prompt.text;
+            updateWordCountDisplay();
+            
+            const preparationContent = document.getElementById('preparationContent');
+            preparationContent.innerHTML = `
+                <h2>Background Information</h2>
+                <div class="content-box">
+                    <h3>Context</h3>
+                    <p>${topic.backgroundContent[0]}</p>
+                </div>
+                <div class="content-box">
+                    <h3>Key Phrases to Use</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="background: #f0f4ff;">
+                            <td style="padding: 10px; border: 1px solid #e5e7eb;"><strong>English</strong></td>
+                            <td style="padding: 10px; border: 1px solid #e5e7eb;"><strong>Russian</strong></td>
+                        </tr>
+                        ${topic.keyPhrases.slice(0, 5).map(phrase => `
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e5e7eb;">${phrase.en}</td>
+                                <td style="padding: 10px; border: 1px solid #e5e7eb;">${phrase.ru}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+            `;
+            
+            document.getElementById('essayField').value = '';
+            document.getElementById('feedbackSection').classList.add('hidden');
+            
+            document.getElementById('promptsScreen').classList.add('hidden');
+            document.getElementById('writingScreen').classList.remove('hidden');
+        }
+
+        function updateWordCount() {
+            const essay = document.getElementById('essayField').value;
+            const wordCount = essay.trim().split(/\s+/).filter(w => w.length > 0).length;
+            document.getElementById('currentWordCount').textContent = wordCount;
+            
+            const level = DIFFICULTY_LEVELS[currentLevel];
+            const counter = document.getElementById('wordCounter');
+            if (wordCount < level.minWords) {
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning');
+            }
+        }
+
+        function updateWordCountDisplay() {
+            const level = DIFFICULTY_LEVELS[currentLevel];
+            document.getElementById('minimumWords').textContent = level.minWords;
+        }
+
+        function evaluateEssay() {
+            const essay = document.getElementById('essayField').value;
+            const wordCount = essay.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const level = DIFFICULTY_LEVELS[currentLevel];
+            
+            if (wordCount < level.minWords) {
+                alert(`Please write at least ${level.minWords} words for ${level.name} level.`);
+                return;
+            }
+            
+            const taskResponse = calculateEvaluation(essay, wordCount);
+            displayFeedback(taskResponse);
+        }
+
+        function calculateEvaluation(essay, wordCount) {
+            const level = DIFFICULTY_LEVELS[currentLevel];
+            
+            const coherence = calculateCoherence(essay);
+            const lexical = calculateLexicalRange(essay);
+            const grammar = calculateGrammarScore(essay);
+            const taskCompletion = calculateTaskCompletion(essay);
+            
+            const baseScore = (coherence + lexical + grammar + taskCompletion) / 4;
+            const wordBonus = Math.min((wordCount - level.minWords) / 50, 0.5);
+            const finalScore = Math.min(baseScore + wordBonus, level.maxBand);
+            
+            return {
+                finalScore: Math.round(finalScore * 10) / 10,
+                coherence: Math.round(coherence * 10) / 10,
+                lexical: Math.round(lexical * 10) / 10,
+                grammar: Math.round(grammar * 10) / 10,
+                taskCompletion: Math.round(taskCompletion * 10) / 10,
+                wordCount: wordCount
+            };
+        }
+
+        function calculateCoherence(essay) {
+            const sentences = essay.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const paragraphs = essay.split('\n\n').filter(p => p.trim().length > 0);
+            
+            const cohesiveMarkers = ['yet', 'thus', 'still', 'also', 'next', 'finally', 'overall', 'meanwhile', 'eventually', 'instead', 'similarly', 'likewise'];
+            let markerCount = 0;
+            cohesiveMarkers.forEach(marker => {
+                const regex = new RegExp(`\\b${marker}\\b`, 'gi');
+                markerCount += (essay.match(regex) || []).length;
+            });
+            
+            const score = Math.min(5 + (paragraphs.length * 0.3) + (markerCount * 0.2), 9);
+            return score;
+        }
+
+        function calculateLexicalRange(essay) {
+            const words = essay.toLowerCase().split(/\s+/).filter(w => w.match(/^[a-z]+$/));
+            const uniqueWords = new Set(words);
+            const vocabularyDiversity = uniqueWords.size / words.length;
+            
+            const advancedWords = ['utilise', 'establish', 'analyse', 'comprehensive', 'significant', 'substantial', 'remarkable', 'enhance', 'facilitate', 'implement', 'address', 'demonstrate'];
+            let advancedCount = 0;
+            advancedWords.forEach(word => {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                advancedCount += (essay.match(regex) || []).length;
+            });
+            
+            const score = Math.min(4 + (vocabularyDiversity * 3) + (advancedCount * 0.1), 9);
+            return score;
+        }
+
+        function calculateGrammarScore(essay) {
+            let score = 8;
+            
+            const commonErrors = [
+                { pattern: /\b(a|an)\s+(?![aeiou])/gi, penalty: 0.5 },
+                { pattern: /\b(is|are)\s+(a|an)\s+/gi, penalty: 0.3 },
+                { pattern: /\s{2,}/g, penalty: 0.2 }
+            ];
+            
+            commonErrors.forEach(error => {
+                const matches = essay.match(error.pattern) || [];
+                score -= matches.length * error.penalty;
+            });
+            
+            score = Math.max(Math.min(score, 9), 3);
+            return score;
+        }
+
+        function calculateTaskCompletion(essay) {
+            const length = essay.length;
+            const ideas = essay.split(/[.!?]+/).length;
+            
+            const score = Math.min(5 + (ideas * 0.3) + (Math.min(length / 200, 2)), 9);
+            return score;
+        }
+
+        function displayFeedback(taskResponse) {
+            document.getElementById('bandScore').textContent = taskResponse.finalScore;
+            
+            const metricsContainer = document.getElementById('metricsContainer');
+            metricsContainer.innerHTML = `
+                <div class="metric-box">
+                    <h4>Coherence & Cohesion</h4>
+                    <div class="metric-score">${taskResponse.coherence}</div>
+                </div>
+                <div class="metric-box">
+                    <h4>Lexical Range</h4>
+                    <div class="metric-score">${taskResponse.lexical}</div>
+                </div>
+                <div class="metric-box">
+                    <h4>Grammar</h4>
+                    <div class="metric-score">${taskResponse.grammar}</div>
+                </div>
+                <div class="metric-box">
+                    <h4>Task Completion</h4>
+                    <div class="metric-score">${taskResponse.taskCompletion}</div>
+                </div>
+            `;
+            
+            const suggestions = generateSuggestions(taskResponse);
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            suggestionsContainer.innerHTML = `
+                <h3 style="color: #1e3a8a; margin-top: 20px;">Areas to Improve</h3>
+                <ul class="suggestions-list">
+                    ${suggestions.map(s => `<li>${s}</li>`).join('')}
+                </ul>
+            `;
+            
+            document.getElementById('feedbackSection').classList.remove('hidden');
+        }
+
+        function generateSuggestions(taskResponse) {
+            const suggestions = [];
+            
+            if (taskResponse.coherence < 7) {
+                suggestions.push("Link your paragraphs better. Use connecting words like 'yet', 'as a result', 'in contrast' between ideas.");
+            }
+            if (taskResponse.lexical < 7) {
+                suggestions.push("Use more varied words. Replace common terms with precise alternatives.");
+            }
+            if (taskResponse.grammar < 7) {
+                suggestions.push("Check articles (a/an/the) and make sure verbs match their subjects.");
+            }
+            if (taskResponse.taskCompletion < 7) {
+                suggestions.push("Answer all parts of the prompt with concrete examples.");
+            }
+            
+            if (suggestions.length === 0) {
+                suggestions.push("Great work! Keep writing to build consistency.");
+            }
+            
+            return suggestions;
+        }
+
+        function returnToMenu() {
+            document.getElementById('topicsScreen').classList.add('hidden');
+            document.getElementById('mainMenu').classList.remove('hidden');
+        }
+
+        function backToTopics() {
+            document.getElementById('promptsScreen').classList.add('hidden');
+            document.getElementById('topicsScreen').classList.remove('hidden');
+        }
+
+        function backToPrompts() {
+            document.getElementById('writingScreen').classList.add('hidden');
+            document.getElementById('promptsScreen').classList.remove('hidden');
+        }
+
+        function openProgressTracker() {
+            const progressList = document.getElementById('progressList');
+            progressList.innerHTML = `
+                <div style="padding: 15px; background: #f0f4ff; border-radius: 8px;">
+                    <p>Start writing and practicing to track your progress here.</p>
+                    <p style="margin-top: 10px; color: #666;">Your performance data will be stored as you complete more tasks.</p>
+                </div>
+            `;
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('progressScreen').classList.remove('hidden');
+        }
+
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>
