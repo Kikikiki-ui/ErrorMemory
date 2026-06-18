@@ -81,7 +81,7 @@ textarea:focus { outline: none; border-color: #8b5cf6; }
 <p>Let's find your weak spots first. Takes 30 seconds.</p>
 </header>
 <div class="card">
-<h2 style="margin-bottom: 20px;">📋 Quick Diagnostics</h2>
+<h2 style="margin-bottom: 20px;">  Quick Diagnostics</h2>
 <div id="quiz-container">
 <h3 id="quiz-question">Question 1/2: Select at least 3 challenges you face in IELTS Writing:</h3>
 <div id="quiz-options"></div>
@@ -107,7 +107,7 @@ textarea:focus { outline: none; border-color: #8b5cf6; }
 <button class="btn" onclick="showTask(1)">Task 1 (Academic)</button>
 <button class="btn" onclick="showTask(2)">Task 2 (Essay)</button>
 <br><br>
-<button class="btn btn-outline" onclick="showTracker()">📊 My Error Tracker</button>
+<button class="btn btn-outline" onclick="showTracker()">  My Error Tracker</button>
 </div>
 </div>
 
@@ -134,11 +134,11 @@ textarea:focus { outline: none; border-color: #8b5cf6; }
 <div class="card">
 <h2>Write Your Essay</h2>
 <div style="background: #fef3c7; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.95rem;">
-<strong>📝 Current Prompt:</strong> <span id="current-prompt-text"></span>
+<strong>  Current Prompt:</strong> <span id="current-prompt-text"></span>
 </div>
 <textarea id="essay-input" placeholder="Start writing here..." oninput="updateWordCount()"></textarea>
 <div class="word-count">Words: <span id="word-count">0</span> / <span id="min-words">150</span></div>
-<button class="btn" style="width: 100%;" onclick="analyzeEssay()">⚡ Analyze & Get Band Score</button>
+<button class="btn" style="width: 100%;" onclick="analyzeEssay()">  Analyze & Get Band Score</button>
 </div>
 <div class="card results" id="results-box">
 <div class="score-card">
@@ -152,7 +152,7 @@ textarea:focus { outline: none; border-color: #8b5cf6; }
 <div id="tracker-zone" class="hidden">
 <button class="back-btn" onclick="goHome()">← Back</button>
 <div class="card">
-<h2>📊 Your Error Tracker</h2>
+<h2  Your Error Tracker</h2>
 <p style="margin-bottom: 15px;">Your saved weak spots:</p>
 <div id="tracker-list"></div>
 </div>
@@ -162,9 +162,9 @@ textarea:focus { outline: none; border-color: #8b5cf6; }
 
 <script>
 const topicsData = {
-    // ===== TASK 2 TOPICS =====
+     TASK 2 TOPICS 
     med: {
-        name: "💊 Modern vs Traditional Medicine", task: 2,
+        name: " Modern vs Traditional Medicine", task: 2,
         prompts: [
             { type: "Discussion", text: "Some people prefer modern medicine, while others prefer traditional medicine. Discuss both views and give your opinion." },
             { type: "Adv/Disadv", text: "Modern medicine has many advantages, but traditional medicine is also important. What are the advantages and disadvantages of both?" }
@@ -190,7 +190,7 @@ const topicsData = {
         ]
     },
     env: {
-        name: "🌍 Environment", task: 2,
+        name: " Environment", task: 2,
         prompts: [
             { type: "Discussion", text: "Some people think that environmental problems are too big for individuals to solve. Others believe that individuals can make a difference. Discuss both views and give your opinion." },
             { type: "Problem/Solution", text: "Global warming is one of the biggest threats humans face. What are the causes of this phenomenon and what solutions can be implemented?" }
@@ -216,7 +216,7 @@ const topicsData = {
         ]
     },
     law: {
-        name: "⚖️ Law & Crime", task: 2,
+        name: " Law & Crime", task: 2,
         prompts: [
             { type: "Discussion", text: "Some people believe that the best way to reduce crime is to give longer prison sentences. Others believe there are better alternative ways. Discuss both views and give your opinion." },
             { type: "Problem/Solution", text: "In many cities, the crime rate is increasing. What do you think are the main causes of this problem and what measures can be taken to solve it?" }
@@ -242,7 +242,7 @@ const topicsData = {
         ]
     },
     fam: {
-        name: "👨‍👩‍👧 Family", task: 2,
+        name: " Family", task: 2,
         prompts: [
             { type: "Discussion", text: "Some people think that parents should teach children how to be good members of society. Others believe that school is the best place to learn this. Discuss both views and give your opinion." },
             { type: "Agree/Disagree", text: "Nowadays, many families spend less time together eating meals. To what extent do you agree or disagree that this is a negative development?" }
@@ -267,9 +267,9 @@ const topicsData = {
             {en: "unified approach", ru: "единый подход"}
         ]
     },
-    // ===== TASK 1 TOPICS (ВСЕ 5 ТИПОВ!) =====
+     TASK 1 TOPICS (ВСЕ 5 ТИПОВ!) 
     t1_bar: {
-        name: "📊 Bar Chart", task: 1,
+        name: " Bar Chart", task: 1,
         prompts: [{ type: "Report", text: "The bar chart shows the percentage of people using different modes of transport in London between 1990 and 2010. Summarize the information by selecting and reporting the main features." }],
         visualType: "bar",
         articles: ["The bar chart illustrates transportation usage in London over a 20-year period from 1990 to 2010. Overall, car usage remained the most popular mode of transport throughout the period, despite some fluctuations. In 1990, 45% of commuters used cars, which increased to 52% in 2000 before dropping slightly to 48% in 2010. Bus usage showed a different pattern, starting at 30% in 1990, declining to 25% in 2000, and recovering slightly to 28% by 2010. Train usage demonstrated steady growth, rising from 15% to 20% over the two decades. In contrast, bicycle usage experienced a dramatic decline, falling from 10% to just 4%."],
@@ -292,7 +292,7 @@ const topicsData = {
         ]
     },
     t1_line: {
-        name: "📈 Line Graph", task: 1,
+        name: " Line Graph", task: 1,
         prompts: [{ type: "Report", text: "The line graph shows the number of tourists visiting three European countries (France, Spain, Italy) from 2010 to 2020. Summarize the information." }],
         visualType: "line",
         articles: ["The line graph depicts tourist arrivals in three European countries over a decade from 2010 to 2020. Overall, all three countries experienced steady growth in tourism until 2018, followed by a sharp decline in 2020, likely due to the global pandemic. France consistently attracted the highest number of tourists, starting at 80 million in 2010 and peaking at 92 million in 2018, before plummeting to 60 million in 2020. Spain showed similar trends, rising from 55 million to 75 million, then dropping to 40 million. Italy, while receiving fewer visitors, followed the same pattern, growing from 45 million to 58 million before falling to 35 million."],
@@ -315,7 +315,7 @@ const topicsData = {
         ]
     },
     t1_pie: {
-        name: "🥧 Pie Chart", task: 1,
+        name: " Pie Chart", task: 1,
         prompts: [{ type: "Report", text: "The pie charts show the proportion of energy production from different sources (Coal, Natural Gas, Nuclear, Renewables) in a country in 2000 and 2020. Summarize the information." }],
         visualType: "pie",
         articles: ["The pie charts compare the sources of energy production in a particular country between 2000 and 2020. Overall, there was a significant shift towards renewable energy sources over the 20-year period, while coal usage declined substantially. In 2000, coal dominated energy production at 40%, followed by natural gas at 30%, nuclear power at 20%, and renewables at only 10%. By 2020, the proportion of coal had fallen to 25%, while renewable energy had increased dramatically to 25%, matching coal's share. Natural gas and nuclear power remained relatively stable at 30% and 20% respectively, showing little change over the two decades."],
@@ -338,7 +338,7 @@ const topicsData = {
         ]
     },
     t1_table: {
-        name: "📋 Table", task: 1,
+        name: " Table", task: 1,
         prompts: [{ type: "Report", text: "The table shows the average monthly salaries (in USD) in five different professions in three cities (New York, London, Tokyo) in 2023. Summarize the information." }],
         visualType: "table",
         articles: ["The table presents data on average monthly salaries across five professions in three major cities in 2023. Overall, New York offered the highest salaries across all professions, followed by London and then Tokyo. Doctors and lawyers were the highest-paid professionals in all three cities. In New York, lawyers earned the most at $9,000 per month, followed by doctors at $8,500. Engineers earned $7,500, while nurses and teachers received $5,500 and $4,500 respectively. London showed similar patterns but with lower figures, with lawyers earning $7,500 and doctors $7,000. Tokyo had the lowest salaries overall, though the relative differences between professions remained consistent with the other cities."],
@@ -361,7 +361,7 @@ const topicsData = {
         ]
     },
     t1_map: {
-        name: "🗺️ Map", task: 1,
+        name: " Map", task: 1,
         prompts: [{ type: "Report", text: "The maps show the development of a small town called Riverside between 2000 and 2020. Summarize the changes." }],
         visualType: "map",
         articles: ["The maps illustrate the transformation of Riverside town over a 20-year period from 2000 to 2020. Overall, the town underwent significant modernization and expansion. In 2000, Riverside was a small settlement with basic infrastructure, featuring a primary school, a small hospital, and residential areas in the north. A river ran through the center, with farmland occupying the southern region. By 2020, the town had expanded considerably. The farmland was replaced by a large shopping mall and industrial zone. The hospital was upgraded to a medical center, and a secondary school was added. New residential complexes were built in the east, and a park was established along the riverbank. A bridge was constructed to connect the northern and southern areas, and the road network was significantly improved."],
@@ -506,27 +506,27 @@ function renderPredictions() {
             } else if (data.visualType === 'table') {
                 visualHTML = `
                     <table class="data-table">
-                        <thead><tr><th>Profession</th><th>New York</th><th>London</th><th>Tokyo</th></tr></thead>
+                        <thead><task reasponse><th>Profession</th><th>New York</th><th>London</th><th>Tokyo</th></task reasponsenh></thead>
                         <tbody>
-                            <tr><td>Doctor</td><td>$8,500</td><td>$7,000</td><td>$6,500</td></tr>
-                            <tr><td>Engineer</td><td>$7,500</td><td>$6,500</td><td>$6,000</td></tr>
-                            <tr><td>Teacher</td><td>$4,500</td><td>$3,800</td><td>$3,500</td></tr>
-                            <tr><td>Lawyer</td><td>$9,000</td><td>$7,500</td><td>$7,000</td></tr>
-                            <tr><td>Nurse</td><td>$5,500</td><td>$4,500</td><td>$4,200</td></tr>
+                            <task response><td>Doctor</td><td>$8,500</td><td>$7,000</td><td>$6,500</td></task reasponse>
+                            <task response><td>Engineer</td><td>$7,500</td><td>$6,500</td><td>$6,000</td></task reasponse>
+                            <task response><td>Teacher</td><td>$4,500</td><td>$3,800</td><td>$3,500</td></task reasponse>
+                            <task response><td>Lawyer</td><td>$9,000</td><td>$7,500</td><td>$7,000</td></task reasponse>
+                            <task reasponse><td>Nurse</td><td>$5,500</td><td>$4,500</td><td>$4,200</td></tr>
                         </tbody>
                     </table>`;
             } else if (data.visualType === 'map') {
                 visualHTML = `
                     <div class="map-visual">
                         <div style="margin-bottom: 10px; font-weight: bold; color: #1e3a8a;">Riverside Town - 2000 → 2020</div>
-                        <div class="map-box">🏫 Primary School</div>
-                        <div class="map-box">🏥 Hospital → Medical Center</div>
-                        <div class="map-box">🏘️ Residential (North)</div>
-                        <div class="map-box">🌾 Farmland → 🛍️ Mall</div>
-                        <div class="map-box">🌊 River</div>
-                        <div class="map-box">🌳 New Park</div>
-                        <div class="map-box">🏫 Secondary School (New)</div>
-                        <div class="map-box">🌉 New Bridge</div>
+                        <div class="map-box"> Primary School</div>
+                        <div class="map-box"> Hospital → Medical Center</div>
+                        <div class="map-box"> Residential (North)</div>
+                        <div class="map-box"> Farmland →  Mall</div>
+                        <div class="map-box"> River</div>
+                        <div class="map-box"> New Park</div>
+                        <div class="map-box"> Secondary School (New)</div>
+                        <div class="map-box"> New Bridge</div>
                     </div>`;
             }
         }
@@ -551,13 +551,13 @@ function choosePrompt(index) {
     const minWords = currentTask === 1 ? 150 : 250;
     document.getElementById('min-words').innerText = minWords;
     
-    let chunksHTML = `<table class="chunks-table"><thead><tr><th>English Phrase</th><th>Русский перевод</th></tr></thead><tbody>${data.chunks.map(c => `<tr><td><strong>${c.en}</strong></td><td>${c.ru}</td></tr>`).join('')}</tbody></table>`;
+    let chunksHTML = `<table class="chunks-table"><thead><tr><th>English Phrase</th><th>Русский перевод</th></task reasponse></thead><tbody>${data.chunks.map(c => `<tr><td><strong>${c.en}</strong></td><td>${c.ru}</td></tr>`).join('')}</tbody></table>`;
 
     document.getElementById('prep-content').innerHTML = `
         <h2>Preparation: ${data.name}</h2>
-        <div class="prep-box"><h3>💡 Idea Generator (Article - 90+ words)</h3><p>${data.articles[0]}</p></div>
-        ${data.articles2 ? `<div class="prep-box"><h3>💡 Additional Ideas (Article 2 - 70+ words)</h3><p>${data.articles2[0]}</p></div>` : ''}
-        <div class="prep-box"><h3>✍️ Useful Chunks (${data.chunks.length} phrases)</h3>${chunksHTML}</div>
+        <div class="prep-box"><h3> Idea Generator (Article 1 )</h3><p>${data.articles[0]}</p></div>
+        ${data.articles2 ? `<div class="prep-box"><h3> Additional Ideas (Article 2 )</h3><p>${data.articles2[0]}</p></div>` : ''}
+        <div class="prep-box"><h3> Useful Chunks (${data.chunks.length} phrases)</h3>${chunksHTML}</div>
     `;
 }
 
@@ -593,9 +593,9 @@ function analyzeEssay() {
     const minWords = currentTask === 1 ? 150 : 250;
     if (wordCount < 50) { alert("Please write more!"); return; }
 
-    let tr = 5.0;
-    if (wordCount >= minWords) tr += 2.0; else if (wordCount >= minWords * 0.6) tr += 1.0;
-    if (text.split(/\n\n+/).length >= 4) tr += 1.5;
+    let task reasponse = 5.0;
+    if (wordCount >= minWords) task reasponse += 2.0; else if (wordCount >= minWords * 0.6) task reasponse += 1.0;
+    if (text.split(/\n\n+/).length >= 4) task reasponse += 1.5;
 
     const linkers = ['however', 'moreover', 'furthermore', 'therefore', 'consequently', 'in addition', 'on the other hand', 'for example', 'in conclusion'];
     let linkerCount = 0;
@@ -612,19 +612,19 @@ function analyzeEssay() {
     let gra = 5.0 + (passive * 0.5) + (complexSentences * 0.3); if (gra > 9) gra = 9.0;
 
     const roundHalf = (num) => Math.round(num * 2) / 2;
-    tr = roundHalf(Math.min(tr, 9)); cc = roundHalf(Math.min(cc, 9));
-    lr = roundHalf(Math.min(lr, 9)); gra = roundHalf(Math.min(gra, 9));
-    const overall = roundHalf((tr + cc + lr + gra) / 4);
+    TASK RESPONSE = roundHalf(Math.min(tr, 9)); cc = roundHalf(Math.min(cc, 9));
+    LEXICAL RESOURCE = roundHalf(Math.min(lr, 9)); gra = roundHalf(Math.min(gra, 9));
+    const overall = roundHalf((taskreasponse + coherence&cohesion + lexicalresource + grammaticalrange) / 4);
 
     document.getElementById('overall-score').innerText = overall;
     document.getElementById('criteria-results').innerHTML = `
-        <div class="criteria-box"><h4>Task Response</h4><div class="band-score">${tr}</div><p>${wordCount} words. ${wordCount >= minWords ? 'Good length!' : 'Too short.'}</p></div>
-        <div class="criteria-box"><h4>Coherence & Cohesion</h4><div class="band-score">${cc}</div><p>${linkerCount} linking words used.</p></div>
-        <div class="criteria-box"><h4>Lexical Resource</h4><div class="band-score">${lr}</div><p>${complexCount} academic words used.</p></div>
-        <div class="criteria-box"><h4>Grammatical Range</h4><div class="band-score">${gra}</div><p>${passive} passive structures, ${complexSentences} complex sentences.</p></div>
+        <div class="criteria-box"><h4>Task Response</h4><div class="band-score">${taskresponse}</div><p>${wordCount} words. ${wordCount >= minWords ? 'Good length!' : 'Too short.'}</p></div>
+        <div class="criteria-box"><h4>Coherence & Cohesion</h4><div class="band-score">${coherencecohesion}</div><p>${linkerCount} linking words used.</p></div>
+        <div class="criteria-box"><h4>Lexical Resource</h4><div class="band-score">${lexicalresource}</div><p>${complexCount} academic words used.</p></div>
+        <div class="criteria-box"><h4>Grammatical Range</h4><div class="band-score">${grammaticalrange}</div><p>${passive} passive structures, ${complexSentences} complex sentences.</p></div>
     `;
     document.getElementById('results-box').style.display = 'block';
-    saveErrors(tr, cc, lr, gra);
+    saveErrors(taskresponse, coherencecohesion, lexicalresource, grammaticalrange);
 }
 
 function saveErrors(tr, cc, lr, gra) {
