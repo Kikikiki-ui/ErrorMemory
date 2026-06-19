@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ErrorMemory - Smart IELTS Coach</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { 
+    background: linear-gradient(135deg, #f0e6ff 0%, #e9d5ff 100%);
+    min-height: 100vh; 
+    padding: 20px; 
+    color: #333;
+    position: relative;
+}
+.butterfly-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 300px;
+    opacity: 0.05;
+    z-index: 0;
+    pointer-events: none;
+}
+.container { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+
+header { 
+    text-align: center; 
+    background: white; 
+    padding: 30px; 
+    border-radius: 20px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+header:hover { transform: scale(1.02); }
+h1 { color: #1e3a8a; font-size: 2.5rem; margin-bottom: 10px; }
+.butterfly-logo { font-size: 80px; margin: 10px 0; display: inline-block; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+.card { background: white; padding: 30px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.btn { background: linear-gradient(90deg, #667eea, #764ba2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin: 5px; }
+.btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+.btn-outline { background: white; color: #764ba2; border: 2px solid #764ba2; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+.topic-btn { padding: 20px; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; text-align: center; transition: 0.3s; font-size: 1rem; }
+.topic-btn:hover { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+
+.quiz-option { padding: 15px; margin: 10px 0; background: #f0f4ff; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; }
+.quiz-option:hover { background: #e0e7ff; }
+.quiz-option input { margin-right: 15px; transform: scale(1.3); }
+
+.prompt-card { background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #8b5cf6; cursor: pointer; transition: 0.2s; }
+.prompt-card:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; color: white; margin-bottom: 8px; }
+.badge-disc { background: #10b981; } .badge-ad { background: #f59e0b; } .badge-ps { background: #ef4444; } .badge-pn { background: #8b5cf6; } .badge-rep { background: #3b82f6; }
+
+.bar-chart { display: flex; align-items: flex-end; height: 150px; gap: 10px; margin: 15px 0; padding: 10px; background: white; border-radius: 8px; border: 1px solid #e5e7eb; }
+.bar { flex: 1; background: linear-gradient(to top, #667eea, #8b5cf6); border-radius: 5px 5px 0 0; position: relative; }
+.bar span { position: absolute; bottom: -25px; left: 0; right: 0; text-align: center; font-size: 0.75rem; color: #6b7280; }
+.line-graph { position: relative; height: 180px; margin: 15px 0; padding: 10px; background: white; border-radius: 8px; border: 1px solid #e5e7eb; border-left: 2px solid #333; border-bottom: 2px solid #333; }
+.line-graph svg { width: 100%; height: 100%; }
+.line-legend { display: flex; justify-content: center; gap: 15px; margin-top: 10px; font-size: 0.8rem; }
+.pie-chart { width: 180px; height: 180px; border-radius: 50%; margin: 15px auto; }
+.pie-legend { display: flex; justify-content: center; gap: 15px; margin-top: 10px; font-size: 0.85rem; flex-wrap: wrap; }
+.data-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9rem; }
+.data-table th, .data-table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+.data-table th { background: #667eea; color: white; }
+.data-table tr:nth-child(even) { background: #f9fafb; }
+.map-visual { background: #e5f3ff; padding: 20px; border-radius: 8px; text-align: center; margin: 15px 0; }
+.map-box { display: inline-block; padding: 10px 15px; background: white; border: 2px solid #667eea; border-radius: 8px; margin: 5px; font-size: 0.9rem; }
+
+.prep-box { background: #f0f4ff; padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #8b5cf6; }
+.prep-box h3 { color: #1e3a8a; margin-bottom: 10px; }
+
+.structure-card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #f59e0b; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.structure-card h4 { color: #1e3a8a; font-size: 1rem; margin-bottom: 5px; }
+.structure-formula { color: #8b5cf6; font-weight: bold; font-size: 0.95rem; margin-bottom: 8px; font-family: monospace; background: #f9fafb; padding: 5px 10px; border-radius: 5px; display: inline-block; }
+.structure-example { color: #374151; font-style: italic; line-height: 1.5; }
+
+.chunks-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.95rem; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.chunks-table th { background: #667eea; color: white; padding: 15px; text-align: left; font-weight: 600; }
+.chunks-table td { padding: 15px; vertical-align: top; line-height: 1.5; }
+.chunks-table td:first-child { width: 55%; font-weight: 600; color: #1e3a8a; border-right: 1px solid #f0f4ff; }
+.chunks-table td:last-child { width: 45%; color: #6b7280; }
+.chunks-table tr { border-bottom: 1px solid #f3f4f6; }
+.chunks-table tr:last-child { border-bottom: none; }
+.chunks-table tr:hover { background: #f9fafb; }
+
+textarea { width: 100%; height: 250px; padding: 15px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 1rem; resize: vertical; margin-bottom: 10px; font-family: 'Segoe UI', sans-serif; }
+textarea:focus { outline: none; border-color: #8b5cf6; }
+.word-count { text-align: right; color: #6b7280; font-size: 0.9rem; margin-bottom: 15px; }
+.results { display: none; }
+.score-card { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 15px; }
+.score-big { font-size: 3rem; font-weight: bold; }
+.criteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+.criteria-box { background: #f9fafb; padding: 15px; border-radius: 10px; border-left: 4px solid #8b5cf6; }
+.criteria-box h4 { color: #1e3a8a; margin-bottom: 5px; }
+.band-score { font-size: 1.5rem; font-weight: bold; color: #8b5cf6; }
+.hidden { display: none; }
+.back-btn { background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-bottom: 15px; }
+
+.mock-timer-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 1000;
+    text-align: center;
+    min-width: 150px;
+}
+.mock-timer-label { font-size: 0.9rem; color: #6b7280; margin-bottom: 5px; }
+.mock-timer-display { font-size: 2.5rem; font-weight: bold; font-family: monospace; color: #1e3a8a; transition: color 0.3s; }
+.mock-timer-display.warning { color: #ef4444; animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.mock-task-indicator { font-size: 0.85rem; color: #8b5cf6; margin-top: 5px; font-weight: 600; }
+.mock-end-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+    transition: transform 0.3s;
+}
+.mock-end-btn:hover { transform: scale(1.05); }
+
+.error-highlight {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-family: monospace;
+}
+.feedback-box {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+}
+.feedback-box strong { color: #92400e; }
+.error-list { margin: 15px 0; }
+.error-item {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    color: #dc2626;
+}
+.error-item .error-text {
+    font-family: monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #dc2626;
+    background: #fef2f2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 5px 0;
+}
+.error-item .correction {
+    color: #065f46;
+    font-weight: 600;
+    background: #d1fae5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 5px 0;
+}
+.error-item .tip {
+    color: #1e40af;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    font-style: italic;
+}
+.improvement-box {
+    background: #dbeafe;
+    border-left: 4px solid #3b82f6;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+}
+.improvement-box h4 {
+    color: #1e40af;
+    margin-bottom: 10px;
+}
+.improvement-box ul {
+    margin-left: 20px;
+    color: #1e3a8a;
+}
+.improvement-box li {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+</style>
+</head>
+<body>
+<div class="butterfly-bg">🦋</div>
+
+<div class="container">
+
+<div id="diagnostics-screen">
+<header onclick="goHome()">
+<div class="butterfly-logo">🦋</div>
+<h1>ErrorMemory</h1>
+<p>Let's find your weak spots first. Takes 30 seconds.</p>
+</header>
+<div class="card">
+<h2 style="margin-bottom: 20px;">Quick Diagnostics</h2>
+<div id="quiz-container">
+<h3 id="quiz-question">Question 1/2: Select at least 3 challenges you face in IELTS Writing:</h3>
+<div id="quiz-options"></div>
+<p style="color: #ef4444; font-size: 0.9rem; margin-top: 10px;" id="quiz-hint">* You must select at least 3 options.</p>
+<button class="btn" onclick="nextQuizStep()" style="width: 100%; margin-top: 20px;">Next</button>
+</div>
+<div id="quiz-result" class="hidden" style="text-align: center;">
+<h3>Diagnostics Complete!</h3>
+<p id="recommendation-text" style="margin: 15px 0; font-size: 1.1rem;"></p>
+<button class="btn" onclick="goToMain()">Start Training →</button>
+</div>
+</div>
+</div>
+
+<div id="main-menu" class="hidden">
+<header onclick="goHome()">
+<div class="butterfly-logo">🦋</div>
+<h1>ErrorMemory</h1>
+<p>Smart IELTS Writing Ecosystem. Transforming mistakes into mastery.</p>
+</header>
+<div class="card" style="text-align: center;">
+<h2 style="margin-bottom: 20px;">Choose Your Task</h2>
+<button class="btn" onclick="showTask(1)">Task 1 (Academic)</button>
+<button class="btn" onclick="showTask(2)">Task 2 (Essay)</button>
+<button class="btn" onclick="startMockTest()" style="background: linear-gradient(90deg, #ef4444, #f59e0b);">⏱️ Mock Test (Timer)</button>
+<br><br>
+<button class="btn btn-outline" onclick="showTracker()">My Error Tracker</button>
+<button class="btn btn-outline" onclick="showAboutSite()">About the Site</button>
+</div>
+</div>
+
+<div id="topic-menu" class="hidden">
+<button class="back-btn" onclick="goHome()">← Back</button>
+<div class="card">
+<h2>Select Topic (Predictions)</h2>
+<div class="grid" id="topic-grid"></div>
+</div>
+</div>
+
+<div id="predictions-screen" class="hidden">
+<button class="back-btn" onclick="showUserHistory()">← User History</button>
+<div class="card">
+<h2 id="pred-topic-title">Topic Prompts</h2>
+<p style="color: #6b7280; margin-bottom: 20px;">Choose a prompt to practice.</p>
+<div id="prompts-list"></div>
+</div>
+</div>
+
+<div id="writing-zone" class="hidden">
+<button class="back-btn" onclick="showPredictions()">← Back to Prompts</button>
+<div class="card" id="prep-content"></div>
+<div class="card">
+<h2>Write Your Essay</h2>
+<div style="background: #fef3c7; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.95rem;">
+<strong>Current Prompt:</strong> <span id="current-prompt-text"></span>
+</div>
+<textarea id="essay-input" placeholder="Start writing here..." oninput="updateWordCount()"></textarea>
+<div class="word-count">Words: <span id="word-count">0</span> / <span id="min-words">150</span></div>
+<button class="btn" id="analyze-btn" style="width: 100%;" onclick="analyzeEssay()">Analyze & Get Band Score</button>
+</div>
+<div class="card results" id="results-box">
+<div class="score-card">
+<div>Overall Band Score</div>
+<div class="score-big" id="overall-score">0.0</div>
+</div>
+<div class="criteria-grid" id="criteria-results"></div>
+<div id="error-feedback"></div>
+<div id="improvement-feedback"></div>
+</div>
+</div>
+
+<div id="tracker-zone" class="hidden">
+<button class="back-btn" onclick="goHome()">← Back</button>
+<div class="card">
+<h2>Your Error Tracker</h2>
+<p style="margin-bottom: 15px;">Your saved weak spots:</p>
+<div id="tracker-list"></div>
+</div>
+</div>
+
+<div id="about-site-screen" class="hidden">
+<button class="back-btn" onclick="goHome()">← Back to Main Menu</button>
+<div class="card">
+<div style="text-align: center; margin-bottom: 30px;">
+<div class="butterfly-logo"></div>
+<h2 style="color: #1e3a8a; margin-bottom: 5px;">About ErrorMemory</h2>
+<p style="color: #6b7280;">Intelligent Ecosystem for IELTS Writing Preparation</p>
+</div>
+
+<div style="background: #f0f4ff; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #8b5cf6;">
+<h3 style="color: #1e3a8a; margin-bottom: 10px;">🌐 About the Site</h3>
+<p style="line-height: 1.6;">ErrorMemory is an innovative web application that prepares students for IELTS Writing by addressing the root causes of low scores. Instead of just checking essays after writing, we provide comprehensive pre-writing preparation with articles, Band 7+ grammar structures, and topic-specific vocabulary chunks.</p>
+<p style="line-height: 1.6; margin-top: 10px;"><strong>Key Features:</strong> Smart Diagnostics, Pre-Writing Zone, Error Tracker, Mock Test with Timer, Advanced Error Detection</p>
+<p style="line-height: 1.6; margin-top: 10px;"><strong>Tech Stack:</strong> HTML5, CSS3, JavaScript</p>
+</div>
+
+<div style="background: #f0f4ff; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+<h3 style="color: #1e3a8a; margin-bottom: 10px;"> About the Founder</h3>
+<p style="font-size: 1.2rem; font-weight: bold; color: #1e3a8a; margin-bottom: 5px;">Raibek Kausar</p>
+<p style="color: #6b7280; margin-bottom: 15px;">10th Grade | Shymkent, Kazakhstan</p>
+<p style="line-height: 1.6;">I'm preparing for IELTS myself and noticed how hard it is to find structured writing practice. ErrorMemory is my solution to help students overcome idea deficit, vocabulary gaps, and repeating mistakes.</p>
+<p style="line-height: 1.6; margin-top: 10px;"><strong>Languages:</strong> Kazakh, Russian, English</p>
+<p style="line-height: 1.6; margin-top: 10px;"><strong>Email:</strong> Raibekkausar@gmail.com</p>
+</div>
+
+<p style="text-align: center; color: #8b5cf6; font-weight: bold; margin-top: 20px;">Future Code 2026 Participant</p>
+</div>
+</div>
+
+<div id="mock-test-screen" class="hidden">
+<button class="mock-end-btn" onclick="confirmEndTest()">End Test</button>
+<div class="mock-timer-container">
+<div class="mock-timer-label">Time Remaining</div>
+<div id="mock-timer" class="mock-timer-display">20:00</div>
+<div id="mock-task-indicator" class="mock-task-indicator">Task 1</div>
+</div>
+<div class="container" style="padding-top: 120px;">
+<div class="card" id="mock-content"></div>
+<button class="btn" style="width: 100%; margin-top: 20px;" onclick="confirmEndTest()">Submit & End Test</button>
+</div>
+</div>
+
+</div>
+
+<script>
+const topicsData = {
+    med: {
+        name: "Modern vs Traditional Medicine", task: 2,
+        prompts: [
+            { type: "Discussion", text: "Some people prefer modern medicine, while others prefer traditional medicine. Discuss both views and give your opinion." },
+            { type: "Adv/Disadv", text: "Modern medicine has many advantages, but traditional medicine is also important. What are the advantages and disadvantages of both?" }
+        ],
+        articles: ["Modern medicine relies heavily on advanced technology, rigorous clinical trials, and pharmaceutical drugs to treat various diseases. It offers rapid results, precise diagnostics, and life-saving surgeries. However, it often focuses on symptoms rather than root causes and can be prohibitively expensive. In contrast, traditional medicine uses natural herbs, acupuncture, and holistic approaches passed down through generations. It emphasizes prevention, mental balance, and treating the whole body, but it often lacks rigorous scientific validation and acts much slower. Both systems have unique strengths and weaknesses, making the choice highly dependent on the specific medical condition."],
+        articles2: ["Integrating both medical systems can provide the best comprehensive patient care. While modern medicine is indispensable for handling acute emergencies, complex surgeries, and severe infectious diseases, traditional medicine excels in managing chronic pain, reducing daily stress, and improving overall lifestyle. Patients should always consult qualified professionals from both fields to ensure safe, balanced, and effective treatment plans. This combined approach ensures that patients receive the most effective and holistic healthcare possible in today's world."],
+        structures: [
+            { name: "Structure 1: Complex sentence with exemplification", formula: "With + Noun, such as E1 + E2, S + V", example: "With adequate medical facilities, such as modern hospitals, specialized clinics and well-equipped pharmacies, people are more likely to receive timely and effective treatment." },
+            { name: "Structure 2: Compound sentence + exemplification", formula: "S + V + a pertinent case in point; S + V", example: "Developed nations are a pertinent case in point; having advanced medical infrastructure in numerous areas, these countries are known to have a generally healthier population, compared to the nations that lack these facilities." },
+            { name: "Structure 3: Complex sentence with participle clause", formula: "Having + Noun, S + V", example: "Having access to cutting-edge diagnostic tools, doctors are able to identify diseases at their earliest stages, significantly improving patient outcomes." },
+            { name: "Structure 4: Summative clause", formula: "S + V, a relationship/aspect that + V", example: "In the long run, investing in preventive healthcare may reduce hospital admissions, a relationship that translates into long-term savings for the national budget." }
+        ],
+        chunks: [
+            {en: "relies heavily on advanced technology", ru: "опирается на передовые технологии"},
+            {en: "offers rapid results", ru: "предлагает быстрые результаты"},
+            {en: "life-saving surgeries", ru: "спасающие жизнь операции"},
+            {en: "focuses on symptoms", ru: "фокусируется на симптомах"},
+            {en: "prohibitively expensive", ru: "непомерно дорого"},
+            {en: "natural herbs and holistic approaches", ru: "натуральные травы и целостные подходы"},
+            {en: "emphasizes prevention", ru: "делает упор на профилактику"},
+            {en: "lacks scientific validation", ru: "не имеет научного обоснования"},
+            {en: "acts much slower", ru: "действует намного медленнее"},
+            {en: "acute emergencies", ru: "острые неотложные состояния"},
+            {en: "chronic pain management", ru: "лечение хронической боли"},
+            {en: "rigorous clinical trials", ru: "строгие клинические испытания"},
+            {en: "treat the root cause", ru: "лечить первопричину"},
+            {en: "adverse side effects", ru: "неблагоприятные побочные эффекты"},
+            {en: "comprehensive patient care", ru: "комплексный уход за пациентом"}
+        ]
+    },
+    env: {
+        name: "Environment", task: 2,
+        prompts: [
+            { type: "Discussion", text: "Some people think that environmental problems are too big for individuals to solve. Others believe that individuals can make a difference. Discuss both views and give your opinion." },
+            { type: "Problem/Solution", text: "Global warming is one of the biggest threats humans face. What are the causes of this phenomenon and what solutions can be implemented?" }
+        ],
+        articles: ["Environmental degradation has become one of the most pressing issues of the 21st century. Climate change, driven by greenhouse gas emissions and deforestation, poses a significant threat to global ecosystems. Rising temperatures lead to melting ice caps, extreme weather events, and rising sea levels. Furthermore, pollution from industrial activities and plastic waste contaminates our oceans and air. While governments and large corporations bear the primary responsibility for implementing large-scale reforms, individual actions also play a crucial role. Simple changes in daily habits, such as reducing energy consumption, recycling, and using public transport, can collectively make a substantial difference in mitigating environmental damage and preserving the planet for future generations."],
+        articles2: ["To effectively combat these environmental challenges, a multi-faceted approach is required. Governments must enforce stricter regulations on carbon emissions and invest heavily in renewable energy sources like solar and wind power. Simultaneously, educational campaigns should raise public awareness about sustainable living. Individuals can contribute by adopting a circular economy mindset, minimizing single-use plastics, and supporting eco-friendly businesses. Ultimately, protecting the environment requires a collaborative effort between policymakers, industries, and everyday citizens to ensure a sustainable and healthy future for our planet."],
+        structures: [
+            { name: "Structure 1: Complex sentence with exemplification", formula: "With + Noun, such as E1 + E2, S + V", example: "With adequate environmental policies, such as carbon taxes, recycling programs and renewable energy subsidies, countries are more likely to reduce their ecological footprint." },
+            { name: "Structure 2: Compound sentence + exemplification", formula: "S + V + a pertinent case in point; S + V", example: "Scandinavian countries are a pertinent case in point; having strict emission laws and extensive green infrastructure, these nations are known to have a generally cleaner environment, compared to the countries that lack these regulations." },
+            { name: "Structure 3: Complex sentence with participle clause", formula: "Having + Noun, S + V", example: "Having implemented strict waste management systems, the city has significantly reduced the amount of plastic ending up in the ocean." },
+            { name: "Structure 4: Summative clause", formula: "S + V, a relationship/aspect that + V", example: "In the long run, transitioning to renewable energy may create new jobs, an aspect that translates into long-term economic growth for the region." }
+        ],
+        chunks: [
+            {en: "environmental degradation", ru: "ухудшение окружающей среды"},
+            {en: "pressing issues of the 21st century", ru: "насущные проблемы 21 века"},
+            {en: "greenhouse gas emissions", ru: "выбросы парниковых газов"},
+            {en: "poses a significant threat", ru: "представляет значительную угрозу"},
+            {en: "global ecosystems", ru: "глобальные экосистемы"},
+            {en: "extreme weather events", ru: "экстремальные погодные явления"},
+            {en: "industrial activities", ru: "промышленная деятельность"},
+            {en: "bear the primary responsibility", ru: "нести основную ответственность"},
+            {en: "large-scale reforms", ru: "масштабные реформы"},
+            {en: "mitigating environmental damage", ru: "смягчение ущерба окружающей среде"},
+            {en: "multi-faceted approach", ru: "многогранный подход"},
+            {en: "enforce stricter regulations", ru: "вводить более строгие правила"},
+            {en: "renewable energy sources", ru: "возобновляемые источники энергии"},
+            {en: "sustainable living", ru: "устойчивый образ жизни"},
+            {en: "circular economy mindset", ru: "мышление циркулярной экономики"}
+        ]
+    },
+    law: {
+        name: "Law and Crime", task: 2,
+        prompts: [
+            { type: "Discussion", text: "Some people believe that the best way to reduce crime is to give longer prison sentences. Others believe there are better alternative ways. Discuss both views and give your opinion." },
+            { type: "Problem/Solution", text: "In many cities, the crime rate is increasing. What do you think are the main causes of this problem and what measures can be taken to solve it?" }
+        ],
+        articles: ["Crime remains a significant challenge in many urban areas worldwide, prompting debates about the most effective ways to maintain law and order. Traditionally, the justice system has relied on punitive measures, such as lengthy prison sentences, to deter criminal behavior. The underlying assumption is that harsh punishments will discourage potential offenders. However, many criminologists argue that this approach fails to address the root causes of crime, such as poverty, lack of education, and social inequality. Consequently, prisons often become breeding grounds for further criminal activity rather than centers for rehabilitation. To truly reduce crime rates, society must look beyond mere punishment and focus on preventive strategies that tackle the socioeconomic factors driving individuals toward illegal activities."],
+        articles2: ["Alternative approaches to crime reduction focus on rehabilitation and social integration. Community service, vocational training, and educational programs within prisons can equip offenders with the skills needed to reintegrate into society successfully. Furthermore, investing in early childhood education and providing support for at-risk youth can prevent criminal behavior before it starts. By addressing the root causes of crime and offering second chances, communities can build safer environments. Ultimately, a balanced justice system that combines fair punishment with robust rehabilitation efforts is the most effective way to achieve long-term reductions in crime."],
+        structures: [
+            { name: "Structure 1: Complex sentence with exemplification", formula: "With + Noun, such as E1 + E2, S + V", example: "With adequate social support, such as job training programs, educational grants and community centers, former offenders are more likely to reintegrate successfully." },
+            { name: "Structure 2: Compound sentence + exemplification", formula: "S + V + a pertinent case in point; S + V", example: "Nordic countries are a pertinent case in point; having robust rehabilitation programs in numerous prisons, these nations are known to have a generally lower recidivism rate, compared to the countries that rely solely on punishment." },
+            { name: "Structure 3: Complex sentence with participle clause", formula: "Having + Noun, S + V", example: "Having access to quality education and stable employment, young people are less likely to engage in criminal activities." },
+            { name: "Structure 4: Summative clause", formula: "S + V, a relationship/aspect that + V", example: "In the long run, investing in community policing may build public trust, a relationship that translates into long-term safety for the neighborhood." }
+        ],
+        chunks: [
+            {en: "maintain law and order", ru: "поддерживать закон и порядок"},
+            {en: "punitive measures", ru: "карательные меры"},
+            {en: "lengthy prison sentences", ru: "длительные тюремные сроки"},
+            {en: "deter criminal behavior", ru: "сдерживать преступное поведение"},
+            {en: "harsh punishments", ru: "суровые наказания"},
+            {en: "root causes of crime", ru: "коренные причины преступности"},
+            {en: "social inequality", ru: "социальное неравенство"},
+            {en: "breeding grounds", ru: "питательная среда"},
+            {en: "preventive strategies", ru: "превентивные стратегии"},
+            {en: "socioeconomic factors", ru: "социально-экономические факторы"},
+            {en: "social integration", ru: "социальная интеграция"},
+            {en: "vocational training", ru: "профессиональное обучение"},
+            {en: "reintegrate into society", ru: "реинтегрироваться в общество"},
+            {en: "at-risk youth", ru: "молодежь из группы риска"},
+            {en: "balanced justice system", ru: "сбалансированная система правосудия"}
+        ]
+    },
+    fam: {
+        name: "Family", task: 2,
+        prompts: [
+            { type: "Discussion", text: "Some people think that parents should teach children how to be good members of society. Others believe that school is the best place to learn this. Discuss both views and give your opinion." },
+            { type: "Agree/Disagree", text: "Nowadays, many families spend less time together eating meals. To what extent do you agree or disagree that this is a negative development?" }
+        ],
+        articles: ["The family unit has traditionally been the cornerstone of society, playing a vital role in shaping a child's moral compass and social skills. Parents are the first educators a child encounters, and the values instilled at home often dictate future behavior. Through daily interactions, children learn empathy, respect, and responsibility. However, in today's fast-paced world, both parents often work long hours, leaving less time for family bonding and moral guidance. Consequently, many argue that schools must take on a larger role in teaching social values. Schools provide a structured environment where children interact with diverse peers, learning teamwork, tolerance, and civic duty under the guidance of trained educators."],
+        articles2: ["Ultimately, the responsibility of raising good citizens should be a collaborative effort between home and school. While parents lay the foundational moral groundwork, schools reinforce these values through formal education and social activities. A strong partnership between parents and teachers ensures that children receive consistent messaging about right and wrong. When families and educational institutions work together, they create a supportive network that nurtures well-rounded individuals. Therefore, neither parents nor schools can solely bear the burden of socializing children; it requires a unified approach to effectively prepare the younger generation for the complexities of adult life."],
+        structures: [
+            { name: "Structure 1: Complex sentence with exemplification", formula: "With + Noun, such as E1 + E2, S + V", example: "With adequate family time, such as shared meals, weekend activities and open communication, children are more likely to develop strong emotional intelligence." },
+            { name: "Structure 2: Compound sentence + exemplification", formula: "S + V + a pertinent case in point; S + V", example: "Traditional communities are a pertinent case in point; having strong intergenerational bonds in numerous households, these societies are known to have a generally more respectful younger generation, compared to the cultures that lack these ties." },
+            { name: "Structure 3: Complex sentence with participle clause", formula: "Having + Noun, S + V", example: "Having consistent moral guidance from both parents and teachers, children are better equipped to navigate the complexities of adult life." },
+            { name: "Structure 4: Summative clause", formula: "S + V, a relationship/aspect that + V", example: "In the long run, prioritizing family bonding may strengthen emotional resilience, an aspect that translates into long-term mental well-being for the individual." }
+        ],
+        chunks: [
+            {en: "family unit", ru: "ячейка общества"},
+            {en: "cornerstone of society", ru: "краеугольный камень общества"},
+            {en: "moral compass", ru: "моральный компас"},
+            {en: "values instilled at home", ru: "ценности, привитые дома"},
+            {en: "daily interactions", ru: "повседневное взаимодействие"},
+            {en: "fast-paced world", ru: "быстро меняющийся мир"},
+            {en: "family bonding", ru: "семейная сплоченность"},
+            {en: "moral guidance", ru: "моральное руководство"},
+            {en: "structured environment", ru: "структурированная среда"},
+            {en: "civic duty", ru: "гражданский долг"},
+            {en: "collaborative effort", ru: "совместные усилия"},
+            {en: "foundational moral groundwork", ru: "фундаментальная моральная основа"},
+            {en: "consistent messaging", ru: "последовательные установки"},
+            {en: "well-rounded individuals", ru: "всесторонне развитые личности"},
+            {en: "unified approach", ru: "единый подход"}
+        ]
+    },
+    t1_bar: {
+        name: "Bar Chart", task: 1,
+        prompts: [{ type: "Report", text: "The bar chart shows the percentage of people using different modes of transport in London between 1990 and 2010. Summarize the information by selecting and reporting the main features." }],
+        visualType: "bar",
+        articles: ["The bar chart illustrates transportation usage in London over a 20-year period from 1990 to 2010. Overall, car usage remained the most popular mode of transport throughout the period, despite some fluctuations. In 1990, 45% of commuters used cars, which increased to 52% in 2000 before dropping slightly to 48% in 2010. Bus usage showed a different pattern, starting at 30% in 1990, declining to 25% in 2000, and recovering slightly to 28% by 2010. Train usage demonstrated steady growth, rising from 15% to 20% over the two decades. In contrast, bicycle usage experienced a dramatic decline, falling from 10% to just 4%."],
+        chunks: [
+            {en: "The bar chart illustrates...", ru: "Столбчатая диаграмма иллюстрирует..."},
+            {en: "shows the percentage of...", ru: "показывает процент..."},
+            {en: "over a 20-year period", ru: "за 20-летний период"},
+            {en: "remained the most popular", ru: "остался самым популярным"},
+            {en: "despite some fluctuations", ru: "несмотря на некоторые колебания"},
+            {en: "increased to...", ru: "увеличилось до..."},
+            {en: "dropping slightly to...", ru: "немного упало до..."},
+            {en: "showed a different pattern", ru: "показало иную картину"},
+            {en: "demonstrated steady growth", ru: "продемонстрировало устойчивый рост"},
+            {en: "experienced a dramatic decline", ru: "испытал резкое падение"},
+            {en: "throughout the period", ru: "на протяжении всего периода"},
+            {en: "starting at...%", ru: "начиная с...%"},
+            {en: "rising from X to Y", ru: "возрастая с X до Y"},
+            {en: "falling from X to Y", ru: "падая с X до Y"},
+            {en: "recovering slightly", ru: "немного восстановившись"}
+        ]
+    },
+    t1_line: {
+        name: "Line Graph", task: 1,
+        prompts: [{ type: "Report", text: "The line graph shows the number of tourists visiting three European countries (France, Spain, Italy) from 2010 to 2020. Summarize the information." }],
+        visualType: "line",
+        articles: ["The line graph depicts tourist arrivals in three European countries over a decade from 2010 to 2020. Overall, all three countries experienced steady growth in tourism until 2018, followed by a sharp decline in 2020, likely due to the global pandemic. France consistently attracted the highest number of tourists, starting at 80 million in 2010 and peaking at 92 million in 2018, before plummeting to 60 million in 2020. Spain showed similar trends, rising from 55 million to 75 million, then dropping to 40 million. Italy, while receiving fewer visitors, followed the same pattern, growing from 45 million to 58 million before falling to 35 million."],
+        chunks: [
+            {en: "The line graph depicts...", ru: "Линейный график изображает..."},
+            {en: "over a decade", ru: "за десятилетие"},
+            {en: "experienced steady growth", ru: "испытал устойчивый рост"},
+            {en: "followed by a sharp decline", ru: "за которым последовало резкое падение"},
+            {en: "consistently attracted", ru: "постоянно привлекал"},
+            {en: "peaking at...", ru: "достигая пика в..."},
+            {en: "plummeting to...", ru: "резко упав до..."},
+            {en: "showed similar trends", ru: "показал аналогичные тенденции"},
+            {en: "while receiving fewer visitors", ru: "хотя получая меньше посетителей"},
+            {en: "followed the same pattern", ru: "следовал той же схеме"},
+            {en: "global pandemic", ru: "глобальная пандемия"},
+            {en: "tourist arrivals", ru: "прибытие туристов"},
+            {en: "sharp decline", ru: "резкое снижение"},
+            {en: "from X million to Y million", ru: "с X миллионов до Y миллионов"},
+            {en: "overall trend", ru: "общая тенденция"}
+        ]
+    },
+    t1_pie: {
+        name: "Pie Chart", task: 1,
+        prompts: [{ type: "Report", text: "The pie charts show the proportion of energy production from different sources (Coal, Natural Gas, Nuclear, Renewables) in a country in 2000 and 2020. Summarize the information." }],
+        visualType: "pie",
+        articles: ["The pie charts compare the sources of energy production in a particular country between 2000 and 2020. Overall, there was a significant shift towards renewable energy sources over the 20-year period, while coal usage declined substantially. In 2000, coal dominated energy production at 40%, followed by natural gas at 30%, nuclear power at 20%, and renewables at only 10%. By 2020, the proportion of coal had fallen to 25%, while renewable energy had increased dramatically to 25%, matching coal's share. Natural gas and nuclear power remained relatively stable at 30% and 20% respectively, showing little change over the two decades."],
+        chunks: [
+            {en: "The pie charts compare...", ru: "Круговые диаграммы сравнивают..."},
+            {en: "proportion of energy production", ru: "доля производства энергии"},
+            {en: "significant shift towards...", ru: "значительный сдвиг в сторону..."},
+            {en: "declined substantially", ru: "существенно снизился"},
+            {en: "dominated energy production", ru: "доминировал в производстве энергии"},
+            {en: "followed by...", ru: "за которым следует..."},
+            {en: "increased dramatically", ru: "резко увеличилось"},
+            {en: "matching coal's share", ru: "соответствуя доле угля"},
+            {en: "remained relatively stable", ru: "остался относительно стабильным"},
+            {en: "showing little change", ru: "показывая небольшие изменения"},
+            {en: "over the 20-year period", ru: "за 20-летний период"},
+            {en: "renewable energy sources", ru: "возобновляемые источники энергии"},
+            {en: "natural gas", ru: "природный газ"},
+            {en: "nuclear power", ru: "атомная энергия"},
+            {en: "respectively", ru: "соответственно"}
+        ]
+    },
+    t1_table: {
+        name: "Table", task: 1,
+        prompts: [{ type: "Report", text: "The table shows the average monthly salaries (in USD) in five different professions in three cities (New York, London, Tokyo) in 2023. Summarize the information." }],
+        visualType: "table",
+        articles: ["The table presents data on average monthly salaries across five professions in three major cities in 2023. Overall, New York offered the highest salaries across all professions, followed by London and then Tokyo. Doctors and lawyers were the highest-paid professionals in all three cities. In New York, lawyers earned the most at $9,000 per month, followed by doctors at $8,500. Engineers earned $7,500, while nurses and teachers received $5,500 and $4,500 respectively. London showed similar patterns but with lower figures, with lawyers earning $7,500 and doctors $7,000. Tokyo had the lowest salaries overall, though the relative differences between professions remained consistent with the other cities."],
+        chunks: [
+            {en: "The table presents data on...", ru: "Таблица представляет данные о..."},
+            {en: "average monthly salaries", ru: "среднемесячные зарплаты"},
+            {en: "across five professions", ru: "по пяти профессиям"},
+            {en: "offered the highest salaries", ru: "предлагал самые высокие зарплаты"},
+            {en: "highest-paid professionals", ru: "самые высокооплачиваемые специалисты"},
+            {en: "earned the most", ru: "зарабатывали больше всего"},
+            {en: "followed by...", ru: "за которыми следуют..."},
+            {en: "respectively", ru: "соответственно"},
+            {en: "showed similar patterns", ru: "показал аналогичные закономерности"},
+            {en: "with lower figures", ru: "с более низкими показателями"},
+            {en: "the lowest salaries overall", ru: "самые низкие зарплаты в целом"},
+            {en: "relative differences", ru: "относительные различия"},
+            {en: "remained consistent", ru: "остались последовательными"},
+            {en: "major cities", ru: "крупные города"},
+            {en: "per month", ru: "в месяц"}
+        ]
+    },
+    t1_map: {
+        name: "Map", task: 1,
+        prompts: [{ type: "Report", text: "The maps show the development of a small town called Riverside between 2000 and 2020. Summarize the changes." }],
+        visualType: "map",
+        articles: ["The maps illustrate the transformation of Riverside town over a 20-year period from 2000 to 2020. Overall, the town underwent significant modernization and expansion. In 2000, Riverside was a small settlement with basic infrastructure, featuring a primary school, a small hospital, and residential areas in the north. A river ran through the center, with farmland occupying the southern region. By 2020, the town had expanded considerably. The farmland was replaced by a large shopping mall and industrial zone. The hospital was upgraded to a medical center, and a secondary school was added. New residential complexes were built in the east, and a park was established along the riverbank. A bridge was constructed to connect the northern and southern areas, and the road network was significantly improved."],
+        chunks: [
+            {en: "The maps illustrate...", ru: "Карты иллюстрируют..."},
+            {en: "the transformation of...", ru: "трансформацию..."},
+            {en: "underwent significant modernization", ru: "претерпел значительную модернизацию"},
+            {en: "over a 20-year period", ru: "за 20-летний период"},
+            {en: "small settlement", ru: "небольшое поселение"},
+            {en: "basic infrastructure", ru: "базовая инфраструктура"},
+            {en: "expanded considerably", ru: "значительно расширился"},
+            {en: "was replaced by...", ru: "был заменен на..."},
+            {en: "was upgraded to...", ru: "был обновлен до..."},
+            {en: "was added", ru: "был добавлен"},
+            {en: "residential complexes", ru: "жилые комплексы"},
+            {en: "was established", ru: "был создан"},
+            {en: "was constructed", ru: "был построен"},
+            {en: "connect the northern and southern areas", ru: "соединить северную и южную зоны"},
+            {en: "road network was improved", ru: "дорожная сеть была улучшена"}
+        ]
+    }
+};
+
+let currentTask = 0;
+let selectedTopicId = null;
+let selectedPrompt = null;
+let quizStep = 0;
+let quizAnswers = [];
+let mockTestMode = false;
+let mockTestTimer = null;
+let mockTestTimeLeft = 0;
+let currentMockTask = 0;
+let mockTask1Text = '';
+let mockTask2Text = '';
+let mockTestStoppedAt = null;
+
+const quizQuestions = [
+    { q: "Select at least 3 challenges you face in IELTS Writing:", opts: ["Generating ideas", "Vocabulary range", "Grammar & Punctuation", "Time management", "Essay structure", "Motivation"], minSelect: 3 },
+    { q: "What is your current estimated band score?", opts: ["5.0 - 5.5", "6.0 - 6.5", "7.0+"], minSelect: 1 }
+];
+
+window.onload = function() { renderQuiz(); };
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-options');
+    container.innerHTML = '';
+    document.getElementById('quiz-question').innerText = `Question ${quizStep + 1}/2: ${quizQuestions[quizStep].q}`;
+    const hint = document.getElementById('quiz-hint');
+    if (quizQuestions[quizStep].minSelect === 1) {
+        hint.innerText = "* Please select one option.";
+        hint.style.color = "#6b7280";
+    } else {
+        hint.innerText = "* You must select at least 3 options.";
+        hint.style.color = "#ef4444";
+    }
+    quizQuestions[quizStep].opts.forEach(opt => {
+        container.innerHTML += `<label class="quiz-option"><input type="checkbox" value="${opt}"> ${opt}</label>`;
+    });
+}
+
+function nextQuizStep() {
+    const checked = document.querySelectorAll('#quiz-options input[type="checkbox"]:checked');
+    const minSelect = quizQuestions[quizStep].minSelect;
+    
+    if (checked.length < minSelect) { 
+        alert(`Please select at least ${minSelect} option(s) to continue!`); 
+        return; 
+    }
+    
+    if (minSelect === 1) {
+        quizAnswers.push(checked[0].value);
+    } else {
+        quizAnswers.push(Array.from(checked).map(c => c.value));
+    }
+    
+    if (quizStep < 1) { 
+        quizStep++; 
+        renderQuiz(); 
+    } else { 
+        showQuizResult(); 
+    }
+}
+
+function showQuizResult() {
+    document.getElementById('quiz-container').classList.add('hidden');
+    document.getElementById('quiz-result').classList.remove('hidden');
+    let rec = "Based on your answers, we recommend focusing on Vocabulary Chunks and Essay Structure.";
+    if (quizAnswers[0].includes("Generating ideas")) rec = "Your main focus should be Idea Generation. Read the short articles carefully before writing!";
+    else if (quizAnswers[0].includes("Grammar")) rec = "Pay extra attention to the grammar rules section and check your linking words.";
+    document.getElementById('recommendation-text').innerHTML = rec;
+}
+
+function goToMain() {
+    document.getElementById('diagnostics-screen').classList.add('hidden');
+    document.getElementById('main-menu').classList.remove('hidden');
+}
+
+function showTask(task) {
+    currentTask = task;
+    document.getElementById('main-menu').classList.add('hidden');
+    document.getElementById('topic-menu').classList.remove('hidden');
+    renderTopics();
+}
+
+function renderTopics() {
+    const grid = document.getElementById('topic-grid');
+    grid.innerHTML = '';
+    Object.keys(topicsData).forEach(id => {
+        if (topicsData[id].task === currentTask) {
+            grid.innerHTML += `<div class="topic-btn" onclick="selectTopic('${id}')">${topicsData[id].name}</div>`;
+        }
+    });
+}
+
+function selectTopic(id) {
+    selectedTopicId = id;
+    document.getElementById('topic-menu').classList.add('hidden');
+    document.getElementById('predictions-screen').classList.remove('hidden');
+    renderPredictions();
+}
+
+function renderPredictions() {
+    const data = topicsData[selectedTopicId];
+    document.getElementById('pred-topic-title').innerText = data.name + " Prompts";
+    const list = document.getElementById('prompts-list');
+    list.innerHTML = '';
+    
+    data.prompts.forEach((p, i) => {
+        let badgeClass = p.type === "Discussion" ? "badge-disc" : 
+                         p.type === "Adv/Disadv" ? "badge-ad" : 
+                         p.type === "Problem/Solution" ? "badge-ps" : 
+                         p.type === "Agree/Disagree" ? "badge-ad" : "badge-rep";
+        
+        let visualHTML = '';
+        if (currentTask === 1) {
+            if (data.visualType === 'bar') {
+                visualHTML = `<div class="bar-chart">
+                    <div class="bar" style="height: 45%;"><span>1990</span></div>
+                    <div class="bar" style="height: 52%;"><span>2000</span></div>
+                    <div class="bar" style="height: 48%;"><span>2010</span></div>
+                </div><p style="text-align: center; font-size: 0.8rem; color: #6b7280; margin-top: 30px;">Car Usage in London (%)</p>`;
+            } else if (data.visualType === 'line') {
+                visualHTML = `<div class="line-graph">
+                    <svg viewBox="0 0 400 150" preserveAspectRatio="none">
+                        <polyline points="0,100 80,85 160,70 240,55 320,40 400,90" style="fill:none;stroke:#8b5cf6;stroke-width:3"/>
+                        <polyline points="0,120 80,110 160,100 240,85 320,70 400,115" style="fill:none;stroke:#667eea;stroke-width:3"/>
+                    </svg>
+                </div><div class="line-legend"><span>France</span><span>Spain</span></div>`;
+            } else if (data.visualType === 'pie') {
+                visualHTML = `<div class="pie-chart" style="background: conic-gradient(#667eea 0deg 144deg, #8b5cf6 144deg 252deg, #f59e0b 252deg 324deg, #10b981 324deg 360deg);"></div>
+                <div class="pie-legend"><span>Coal 40%</span><span>Gas 30%</span><span>Nuclear 20%</span><span>Renewable 10%</span></div>
+                <p style="text-align: center; font-size: 0.8rem; color: #6b7280; margin-top: 10px;">Energy Sources in 2000</p>`;
+            } else if (data.visualType === 'table') {
+                visualHTML = `<table class="data-table">
+                    <thead><tr><th>Profession</th><th>New York</th><th>London</th><th>Tokyo</th></tr></thead>
+                    <tbody>
+                        <tr><td>Doctor</td><td>$8,500</td><td>$7,000</td><td>$6,500</td></tr>
+                        <tr><td>Engineer</td><td>$7,500</td><td>$6,500</td><td>$6,000</td></tr>
+                        <tr><td>Teacher</td><td>$4,500</td><td>$3,800</td><td>$3,500</td></tr>
+                        <tr><td>Lawyer</td><td>$9,000</td><td>$7,500</td><td>$7,000</td></tr>
+                        <tr><td>Nurse</td><td>$5,500</td><td>$4,500</td><td>$4,200</td></tr>
+                    </tbody>
+                </table>`;
+            } else if (data.visualType === 'map') {
+                visualHTML = `<div class="map-visual">
+                    <div style="margin-bottom: 10px; font-weight: bold; color: #1e3a8a;">Riverside Town - 2000 → 2020</div>
+                    <div class="map-box">Primary School</div>
+                    <div class="map-box">Hospital → Medical Center</div>
+                    <div class="map-box">Residential (North)</div>
+                    <div class="map-box">Farmland → Mall</div>
+                    <div class="map-box">River</div>
+                    <div class="map-box">New Park</div>
+                    <div class="map-box">Secondary School (New)</div>
+                    <div class="map-box">New Bridge</div>
+                </div>`;
+            }
+        }
+        
+        list.innerHTML += `<div class="prompt-card" onclick="choosePrompt(${i})">
+            <span class="badge ${badgeClass}">[${p.type}]</span>
+            ${visualHTML}
+            <p style="font-size: 1.05rem; line-height: 1.5; margin-top: 10px;">${p.text}</p>
+        </div>`;
+    });
+}
+
+function choosePrompt(index) {
+    selectedPrompt = topicsData[selectedTopicId].prompts[index];
+    document.getElementById('predictions-screen').classList.add('hidden');
+    document.getElementById('writing-zone').classList.remove('hidden');
+    document.getElementById('current-prompt-text').innerText = `"${selectedPrompt.text}"`;
+    
+    const data = topicsData[selectedTopicId];
+    const minWords = currentTask === 1 ? 150 : 250;
+    document.getElementById('min-words').innerText = minWords;
+    
+    let chunksHTML = `<table class="chunks-table"><thead><tr><th>English Phrase</th><th>Русский перевод</th></tr></thead><tbody>${data.chunks.map(c => `<tr><td><strong>${c.en}</strong></td><td>${c.ru}</td></tr>`).join('')}</tbody></table>`;
+
+    let structuresHTML = '';
+    if (data.structures) {
+        structuresHTML = `<div class="prep-box" style="border-left-color: #f59e0b;">
+            <h3 style="color: #1e3a8a;">High-Band Grammar Structures (Band 7+)</h3>
+            ${data.structures.map(s => `
+                <div class="structure-card">
+                    <h4>${s.name}</h4>
+                    <div class="structure-formula">${s.formula}</div>
+                    <p class="structure-example">"${s.example}"</p>
+                </div>
+            `).join('')}
+        </div>`;
+    }
+
+    document.getElementById('prep-content').innerHTML = `
+        <h2>Preparation: ${data.name}</h2>
+        <div class="prep-box"><h3>Article 1</h3><p>${data.articles[0]}</p></div>
+        ${data.articles2 ? `<div class="prep-box"><h3>Article 2</h3><p>${data.articles2[0]}</p></div>` : ''}
+        ${structuresHTML}
+        <div class="prep-box"><h3>Useful Chunks (${data.chunks.length} phrases)</h3>${chunksHTML}</div>
+    `;
+}
+
+function showTopics() {
+    document.getElementById('writing-zone').classList.add('hidden');
+    document.getElementById('topic-menu').classList.remove('hidden');
+    document.getElementById('results-box').style.display = 'none';
+}
+
+function showPredictions() {
+    document.getElementById('writing-zone').classList.add('hidden');
+    document.getElementById('predictions-screen').classList.remove('hidden');
+}
+
+function showUserHistory() {
+    const errors = JSON.parse(localStorage.getItem('em_errors') || '[]');
+    const mockResults = JSON.parse(localStorage.getItem('em_mock_results') || '[]');
+    
+    if (errors.length === 0 && mockResults.length === 0) {
+        alert("No history yet. Write your first essay or take a mock test to start tracking your progress!");
+        return;
+    }
+    
+    let historyHTML = '<div style="text-align: left; max-height: 400px; overflow-y: auto;">';
+    
+    if (errors.length > 0) {
+        historyHTML += '<h3 style="color: #1e3a8a; margin-bottom: 15px;">Practice Essays</h3>';
+        errors.forEach((e, i) => {
+            historyHTML += `<div class="prep-box"><strong>Essay ${i + 1}</strong> - ${e.date}<br>
+                Task: ${e.taskType === 1 ? 'Task 1 (Academic)' : 'Task 2 (Essay)'}<br>
+                Weak spots: ${e.weak}</div>`;
+        });
+    }
+    
+    if (mockResults.length > 0) {
+        historyHTML += '<h3 style="color: #1e3a8a; margin: 20px 0 15px;">Mock Tests</h3>';
+        mockResults.forEach((m, i) => {
+            const stoppedAt = m.stoppedAt ? ` (Stopped at ${m.stoppedAt})` : '';
+            historyHTML += `<div class="prep-box"><strong>Mock Test ${i + 1}</strong> - ${m.date}${stoppedAt}<br>
+                Task 1: ${m.task1.words} words<br>
+                Task 2: ${m.task2.words} words</div>`;
+        });
+    }
+    
+    historyHTML += '</div>';
+    
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: flex; justify-content: center; align-items: center;';
+    modal.innerHTML = `<div class="card" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
+        <h2 style="margin-bottom: 20px;">Your Learning History</h2>
+        ${historyHTML}
+        <button class="btn" onclick="this.parentElement.parentElement.remove()" style="margin-top: 20px;">Close</button>
+    </div>`;
+    document.body.appendChild(modal);
+}
+
+function goHome() {
+    if (mockTestMode) {
+        if (!confirm("Mock test is in progress. Are you sure you want to end it?")) {
+            return;
+        }
+        endMockTest();
+    }
+    document.getElementById('topic-menu').classList.add('hidden');
+    document.getElementById('writing-zone').classList.add('hidden');
+    document.getElementById('tracker-zone').classList.add('hidden');
+    document.getElementById('predictions-screen').classList.add('hidden');
+    document.getElementById('about-site-screen').classList.add('hidden');
+    document.getElementById('mock-test-screen').classList.add('hidden');
+    document.getElementById('main-menu').classList.remove('hidden');
+}
+
+function showTracker() {
+    document.getElementById('main-menu').classList.add('hidden');
+    document.getElementById('tracker-zone').classList.remove('hidden');
+    const errors = JSON.parse(localStorage.getItem('em_errors') || '[]');
+    const taskErrors = errors.filter(e => e.taskType === currentTask || !e.taskType);
+    const list = document.getElementById('tracker-list');
+    if (taskErrors.length === 0) list.innerHTML = '<p>No errors saved yet. Write your first essay!</p>';
+    else list.innerHTML = taskErrors.map(e => `<div class="prep-box"><strong>${e.date}</strong> - Task ${e.taskType || 'N/A'}<br>${e.weak}</div>`).join('');
+}
+
+function showAboutSite() {
+    document.getElementById('main-menu').classList.add('hidden');
+    document.getElementById('about-site-screen').classList.remove('hidden');
+}
+
+function updateWordCount() {
+    const text = document.getElementById('essay-input').value;
+    const count = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    document.getElementById('word-count').innerText = count;
+}
+
+function analyzeEssay() {
+    const text = document.getElementById('essay-input').value;
+    const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+    const wordCount = words.length;
+    const minWords = currentTask === 1 ? 150 : 250;
+    
+    if (wordCount < 50) { 
+        alert("Please write more! Your essay is too short."); 
+        return; 
+    }
+
+    let tr = 5.0;
+    let trFeedback = [];
+    
+    if (wordCount >= minWords) {
+        tr += 2.0;
+        trFeedback.push("✓ Good word count!");
+    } else if (wordCount >= minWords * 0.8) {
+        tr += 1.0;
+        trFeedback.push(`⚠ Your essay is ${wordCount} words. Aim for ${minWords}+ words.`);
+    } else {
+        trFeedback.push(` Too short: ${wordCount} words. You need ${minWords} words minimum.`);
+    }
+    
+    const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0);
+    if (paragraphs.length >= 4) {
+        tr += 1.5;
+        trFeedback.push("✓ Good paragraph structure!");
+    } else if (paragraphs.length >= 3) {
+        tr += 0.5;
+        trFeedback.push(`⚠ Try to add more paragraphs. You have ${paragraphs.length}, aim for 4-5.`);
+    } else {
+        trFeedback.push(` Not enough paragraphs. You have ${paragraphs.length}, need at least 4.`);
+    }
+
+    let cc = 5.0;
+    let ccFeedback = [];
+    
+    const linkers = {
+        'however': 'contrast', 'moreover': 'addition', 'furthermore': 'addition',
+        'therefore': 'result', 'consequently': 'result', 'in addition': 'addition',
+        'on the other hand': 'contrast', 'for example': 'example', 'for instance': 'example',
+        'in conclusion': 'conclusion', 'to sum up': 'conclusion', 'nevertheless': 'contrast',
+        'nonetheless': 'contrast', 'as a result': 'result', 'in contrast': 'contrast',
+        'similarly': 'comparison', 'likewise': 'comparison', 'although': 'contrast',
+        'despite': 'contrast', 'while': 'contrast'
+    };
+    
+    let linkerCount = 0;
+    let linkerTypes = new Set();
+    
+    Object.keys(linkers).forEach(linker => {
+        const regex = new RegExp(`\\b${linker}\\b`, 'gi');
+        const matches = text.match(regex);
+        if (matches) {
+            linkerCount += matches.length;
+            linkerTypes.add(linkers[linker]);
+        }
+    });
+    
+    if (linkerCount >= 8) {
+        cc += 2.5;
+        ccFeedback.push(`✓ Excellent use of linking words (${linkerCount} found)!`);
+    } else if (linkerCount >= 5) {
+        cc += 1.5;
+        ccFeedback.push(`✓ Good linking words (${linkerCount} found). Try to use more variety.`);
+    } else if (linkerCount >= 3) {
+        cc += 0.5;
+        ccFeedback.push(`⚠ Add more linking words. You have ${linkerCount}, aim for 5-8.`);
+    } else {
+        ccFeedback.push(`✗ Too few linking words (${linkerCount}). Use words like: however, moreover, therefore, for example.`);
+    }
+    
+    if (linkerTypes.size >= 3) {
+        ccFeedback.push("✓ Good variety of linking word types!");
+    } else {
+        ccFeedback.push(" Use different types of linking words (contrast, addition, example, result).");
+    }
+
+    let lr = 5.0;
+    let lrFeedback = [];
+    
+    const academicWords = [
+        'significant', 'crucial', 'fundamental', 'consequently', 'nevertheless',
+        'substantial', 'comprehensive', 'demonstrate', 'illustrate', 'implement',
+        'furthermore', 'moreover', 'therefore', 'however', 'although',
+        'despite', 'whereas', 'while', 'regarding', 'concerning',
+        'approach', 'method', 'strategy', 'factor', 'aspect',
+        'benefit', 'advantage', 'disadvantage', 'drawback', 'limitation',
+        'phenomenon', 'issue', 'challenge', 'solution', 'impact',
+        'influence', 'effect', 'consequence', 'outcome', 'result',
+        'evidence', 'research', 'study', 'analysis', 'data',
+        'trend', 'pattern', 'relationship', 'correlation', 'connection',
+        'individual', 'society', 'community', 'population', 'generation',
+        'development', 'improvement', 'progress', 'advancement', 'growth',
+        'environment', 'situation', 'circumstance', 'condition', 'context',
+        'perspective', 'viewpoint', 'opinion', 'argument', 'position',
+        'important', 'essential', 'vital', 'critical', 'necessary',
+        'effective', 'efficient', 'successful', 'appropriate', 'suitable',
+        'consider', 'evaluate', 'assess', 'examine', 'analyze',
+        'suggest', 'indicate', 'show', 'reveal', 'demonstrate',
+        'provide', 'offer', 'give', 'present', 'deliver',
+        'achieve', 'obtain', 'gain', 'acquire', 'attain',
+        'maintain', 'preserve', 'protect', 'prevent', 'avoid',
+        'increase', 'decrease', 'reduce', 'minimize', 'maximize',
+        'enhance', 'improve', 'develop', 'strengthen', 'weaken'
+    ];
+    
+    let academicCount = 0;
+    const textLower = text.toLowerCase();
+    
+    academicWords.forEach(word => {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        const matches = textLower.match(regex);
+        if (matches) academicCount += matches.length;
+    });
+    
+    const uniqueWords = new Set(words.map(w => w.toLowerCase().replace(/[^a-z]/g, '')));
+    const lexicalDiversity = uniqueWords.size / words.length;
+    
+    if (academicCount >= 10) {
+        lr += 3.0;
+        lrFeedback.push(`✓ Excellent academic vocabulary (${academicCount} words found)!`);
+    } else if (academicCount >= 6) {
+        lr += 2.0;
+        lrFeedback.push(`✓ Good academic vocabulary (${academicCount} words).`);
+    } else if (academicCount >= 3) {
+        lr += 1.0;
+        lrFeedback.push(`⚠ Add more academic words. You have ${academicCount}, aim for 6-10.`);
+    } else {
+        lrFeedback.push(`✗ Use more academic vocabulary. You have ${academicCount}. Try: significant, crucial, demonstrate, implement, consequently.`);
+    }
+    
+    if (lexicalDiversity >= 0.7) {
+        lr += 1.0;
+        lrFeedback.push("✓ Excellent vocabulary diversity!");
+    } else if (lexicalDiversity >= 0.5) {
+        lrFeedback.push("⚠ Try to use more varied vocabulary.");
+    } else {
+        lrFeedback.push("✗ Limited vocabulary diversity. Avoid repeating the same words.");
+    }
+
+    let gra = 5.0;
+    let graFeedback = [];
+    let grammarErrors = [];
+    
+    const subjectVerbErrors = [
+        { regex: /\b(people|they|we|you)\s+(is|was|has)\b/gi, correction: "Use plural verb (are/were/have)" },
+        { regex: /\b(he|she|it|everyone|everybody|someone|somebody|no one|nobody)\s+(are|were|have)\b/gi, correction: "Use singular verb (is/was/has)" },
+        { regex: /\b(government|society|education|information|research|evidence|knowledge|advice)\s+(are|were)\b/gi, correction: "Use singular verb (is/was)" },
+        { regex: /\b(I)\s+(is|are|was|were|has|have)\b/gi, correction: "Use 'am' with 'I'" },
+        { regex: /\b(this|that|it)\s+(are|were)\b/gi, correction: "Use singular verb (is/was)" },
+        { regex: /\b(these|those|they)\s+(is|was|has)\b/gi, correction: "Use plural verb (are/were/have)" }
+    ];
+    
+    subjectVerbErrors.forEach(rule => {
+        const found = text.match(rule.regex);
+        if (found) {
+            found.forEach(err => {
+                grammarErrors.push({
+                    error: err,
+                    type: "Subject-Verb Agreement",
+                    correction: rule.correction
+                });
+            });
+        }
+    });
+    
+    const articleErrors = [
+        { regex: /\b(a|an)\s+(information|advice|knowledge|research|evidence|homework|news|furniture|luggage)\b/gi, correction: "Uncountable nouns don't use 'a/an'" },
+        { regex: /\bi\b/g, correction: "Always capitalize 'I'" }
+    ];
+    
+    articleErrors.forEach(rule => {
+        const found = text.match(rule.regex);
+        if (found) {
+            found.forEach(err => {
+                grammarErrors.push({
+                    error: err.trim(),
+                    type: "Article/Capitalization",
+                    correction: rule.correction
+                });
+            });
+        }
+    });
+    
+    const spellingErrors = [
+        { wrong: /\brecieve\b/gi, correct: "receive" },
+        { wrong: /\bbecouse\b/gi, correct: "because" },
+        { wrong: /\bbeleive\b/gi, correct: "believe" },
+        { wrong: /\bdefinate\b/gi, correct: "definite" },
+        { wrong: /\benviroment\b/gi, correct: "environment" },
+        { wrong: /\bgoverment\b/gi, correct: "government" },
+        { wrong: /\bimportent\b/gi, correct: "important" },
+        { wrong: /\bneccessary\b/gi, correct: "necessary" },
+        { wrong: /\boccured\b/gi, correct: "occurred" },
+        { wrong: /\bseperate\b/gi, correct: "separate" },
+        { wrong: /\buntill\b/gi, correct: "until" },
+        { wrong: /\bwich\b/gi, correct: "which" },
+        { wrong: /\bdont\b/gi, correct: "don't" },
+        { wrong: /\bcant\b/gi, correct: "can't" },
+        { wrong: /\bwont\b/gi, correct: "won't" },
+        { wrong: /\bdidnt\b/gi, correct: "didn't" },
+        { wrong: /\bisnt\b/gi, correct: "isn't" },
+        { wrong: /\bwasnt\b/gi, correct: "wasn't" },
+        { wrong: /\bshouldnt\b/gi, correct: "shouldn't" }
+    ];
+    
+    spellingErrors.forEach(rule => {
+        const found = text.match(rule.wrong);
+        if (found) {
+            found.forEach(err => {
+                grammarErrors.push({
+                    error: err,
+                    type: "Spelling",
+                    correction: `Did you mean "${rule.correct}"?`
+                });
+            });
+        }
+    });
+    
+    const doubleWords = /\b(\w+)\s+\1\b/gi;
+    const doubleFound = text.match(doubleWords);
+    if (doubleFound) {
+        doubleFound.forEach(err => {
+            grammarErrors.push({
+                error: err,
+                type: "Repeated Word",
+                correction: "Remove the duplicate word"
+            });
+        });
+    }
+    
+    const passiveRegex = /\b(was|were|is|are|been|being)\s+\w+ed\b/gi;
+    const passiveMatches = text.match(passiveRegex);
+    const passiveCount = passiveMatches ? passiveMatches.length : 0;
+    
+    const complexSentenceMarkers = /\b(which|that|who|whom|whose|although|because|since|while|if|unless|where|when)\b/gi;
+    const complexMatches = text.match(complexSentenceMarkers);
+    const complexCount = complexMatches ? complexMatches.length : 0;
+    
+    if (passiveCount >= 3) {
+        gra += 1.5;
+        graFeedback.push(`✓ Good use of passive voice (${passiveCount} instances).`);
+    } else if (passiveCount >= 1) {
+        gra += 0.5;
+        graFeedback.push(`⚠ Try to use passive voice more (you have ${passiveCount}).`);
+    }
+    
+    if (complexCount >= 5) {
+        gra += 2.0;
+        graFeedback.push(`✓ Excellent use of complex sentences (${complexCount} markers found)!`);
+    } else if (complexCount >= 3) {
+        gra += 1.0;
+        graFeedback.push(`✓ Good complex sentences (${complexCount} markers).`);
+    } else {
+        graFeedback.push(`⚠ Use more complex sentences with: which, that, although, because, while.`);
+    }
+    
+    if (grammarErrors.length === 0) {
+        gra += 1.5;
+        graFeedback.push("✓ No obvious grammar errors detected!");
+    } else {
+        graFeedback.push(` Found ${grammarErrors.length} error(s). See details below.`);
+    }
+
+    const roundHalf = (num) => Math.round(num * 2) / 2;
+    tr = roundHalf(Math.min(tr, 9));
+    cc = roundHalf(Math.min(cc, 9));
+    lr = roundHalf(Math.min(lr, 9));
+    gra = roundHalf(Math.min(gra, 9));
+    const overall = roundHalf((tr + cc + lr + gra) / 4);
+
+    document.getElementById('overall-score').innerText = overall;
+    
+    document.getElementById('criteria-results').innerHTML = `
+        <div class="criteria-box">
+            <h4>Task Response</h4>
+            <div class="band-score">${tr}</div>
+            <p style="margin-top: 10px; font-size: 0.9rem;">${trFeedback.join('<br>')}</p>
+        </div>
+        <div class="criteria-box">
+            <h4>Coherence & Cohesion</h4>
+            <div class="band-score">${cc}</div>
+            <p style="margin-top: 10px; font-size: 0.9rem;">${ccFeedback.join('<br>')}</p>
+        </div>
+        <div class="criteria-box">
+            <h4>Lexical Resource</h4>
+            <div class="band-score">${lr}</div>
+            <p style="margin-top: 10px; font-size: 0.9rem;">${lrFeedback.join('<br>')}</p>
+        </div>
+        <div class="criteria-box">
+            <h4>Grammatical Range</h4>
+            <div class="band-score">${gra}</div>
+            <p style="margin-top: 10px; font-size: 0.9rem;">${graFeedback.join('<br>')}</p>
+        </div>
+    `;
+    
+    let feedbackHTML = '';
+    if (grammarErrors.length > 0) {
+        feedbackHTML += '<div class="feedback-box">';
+        feedbackHTML += '<strong>⚠️ Errors Found (' + grammarErrors.length + '):</strong><br><br>';
+        feedbackHTML += '<div class="error-list">';
+        grammarErrors.forEach((err, idx) => {
+            feedbackHTML += `<div class="error-item">
+                <strong>${idx + 1}. [${err.type}]</strong><br>
+                <span class="error-text">❌ ${err.error}</span><br>
+                <span class="correction">✅ ${err.correction}</span>
+                <div class="tip">💡 Tip: Check your grammar carefully. This is a common mistake.</div>
+            </div>`;
+        });
+        feedbackHTML += '</div></div>';
+    } else {
+        feedbackHTML = '<div class="feedback-box" style="background: #d1fae5; border-left-color: #10b981;"><strong>✅ Great job!</strong> No obvious grammar errors detected.</div>';
+    }
+    document.getElementById('error-feedback').innerHTML = feedbackHTML;
+    
+    let improvementHTML = '';
+    if (tr < 6.5 || cc < 6.5 || lr < 6.5 || gra < 6.5) {
+        improvementHTML += '<div class="improvement-box">';
+        improvementHTML += '<h4>💡 How to Improve Your Score:</h4>';
+        improvementHTML += '<ul>';
+        
+        if (tr < 6.5) {
+            improvementHTML += '<li><strong>Task Response:</strong> Write more (aim for ' + minWords + '+ words) and use 4-5 paragraphs with clear structure.</li>';
+        }
+        if (cc < 6.5) {
+            improvementHTML += '<li><strong>Coherence:</strong> Use more linking words like "however", "moreover", "therefore", "for example". Use different types (contrast, addition, example).</li>';
+        }
+        if (lr < 6.5) {
+            improvementHTML += '<li><strong>Vocabulary:</strong> Use academic words like "significant", "crucial", "demonstrate", "implement". Avoid repeating the same words.</li>';
+        }
+        if (gra < 6.5) {
+            improvementHTML += '<li><strong>Grammar:</strong> Use passive voice (was/were + verb-ed) and complex sentences with "which", "that", "although", "because". Check subject-verb agreement.</li>';
+        }
+        
+        improvementHTML += '</ul></div>';
+    }
+    document.getElementById('improvement-feedback').innerHTML = improvementHTML;
+    
+    document.getElementById('results-box').style.display = 'block';
+    document.getElementById('results-box').scrollIntoView({ behavior: 'smooth' });
+    
+    saveErrors(tr, cc, lr, gra);
+    
+    const btn = document.getElementById('analyze-btn');
+    let countdown = 10;
+    btn.innerText = `Returning to home in ${countdown}s...`;
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    const countdownInterval = setInterval(() => {
+        countdown--;
+        btn.innerText = `Returning to home in ${countdown}s...`;
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            btn.innerText = 'Analyze & Get Band Score';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            goHome();
+            document.getElementById('results-box').style.display = 'none';
+            document.getElementById('essay-input').value = '';
+            document.getElementById('word-count').innerText = '0';
+            document.getElementById('error-feedback').innerHTML = '';
+            document.getElementById('improvement-feedback').innerHTML = '';
+        }
+    }, 1000);
+}
+
+function saveErrors(tr, cc, lr, gra) {
+    let errors = JSON.parse(localStorage.getItem('em_errors') || '[]');
+    let weakPoints = [];
+    if (tr < 6.5) weakPoints.push('Task Response');
+    if (cc < 6.5) weakPoints.push('Coherence');
+    if (lr < 6.5) weakPoints.push('Vocabulary');
+    if (gra < 6.5) weakPoints.push('Grammar');
+    if (weakPoints.length > 0) {
+        errors.push({ 
+            date: new Date().toLocaleDateString(), 
+            weak: weakPoints.join(', '),
+            taskType: currentTask,
+            scores: { tr, cc, lr, gra }
+        });
+        localStorage.setItem('em_errors', JSON.stringify(errors));
+    }
+}
+
+function startMockTest() {
+    if (!confirm("Mock Test will start. You'll have 20 minutes for Task 1 and 40 minutes for Task 2. No hints or help during the test. Ready?")) {
+        return;
+    }
+    
+    mockTestMode = true;
+    currentMockTask = 1;
+    mockTestTimeLeft = 20 * 60;
+    mockTask1Text = '';
+    mockTask2Text = '';
+    mockTestStoppedAt = null;
+    
+    document.getElementById('main-menu').classList.add('hidden');
+    document.getElementById('mock-test-screen').classList.remove('hidden');
+    
+    showMockTask1();
+    startTimer();
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    mockTestTimer = setInterval(() => {
+        mockTestTimeLeft--;
+        updateTimerDisplay();
+        
+        if (mockTestTimeLeft <= 0) {
+            if (currentMockTask === 1) {
+                const task1Input = document.getElementById('mock-essay-input');
+                if (task1Input) mockTask1Text = task1Input.value;
+                
+                currentMockTask = 2;
+                mockTestTimeLeft = 40 * 60;
+                alert("⏰ Time for Task 1 is over! Starting Task 2 now.");
+                showMockTask2();
+            } else {
+                const task2Input = document.getElementById('mock-essay-input');
+                if (task2Input) mockTask2Text = task2Input.value;
+                
+                clearInterval(mockTestTimer);
+                alert("⏰ Time's up! Mock Test Complete.");
+                endMockTest();
+            }
+        }
+        
+        if (mockTestTimeLeft === 5 * 60) {
+            alert("⚠️ Only 5 minutes left!");
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(mockTestTimeLeft / 60);
+    const seconds = mockTestTimeLeft % 60;
+    const timerEl = document.getElementById('mock-timer');
+    const taskIndicator = document.getElementById('mock-task-indicator');
+    
+    if (timerEl) {
+        timerEl.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (mockTestTimeLeft < 5 * 60) {
+            timerEl.classList.add('warning');
+        } else {
+            timerEl.classList.remove('warning');
+        }
+    }
+    
+    if (taskIndicator) {
+        taskIndicator.innerText = currentMockTask === 1 ? 'Task 1 (20 min)' : 'Task 2 (40 min)';
+    }
+}
+
+function showMockTask1() {
+    const mockContent = document.getElementById('mock-content');
+    mockContent.innerHTML = `
+        <div style="background: #fef3c7; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <h3 style="color: #1e3a8a; margin-bottom: 10px;">Task 1: Academic Writing</h3>
+            <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 15px;">️ 20 minutes | Minimum 150 words</p>
+            <p style="font-size: 1.1rem; line-height: 1.6;">
+                The bar chart shows the percentage of people using different modes of transport in London between 1990 and 2010. 
+                Summarize the information by selecting and reporting the main features, and make comparisons where relevant.
+            </p>
+        </div>
+        <textarea id="mock-essay-input" placeholder="Start writing your Task 1 response here..." oninput="updateMockWordCount()"></textarea>
+        <div class="word-count">Words: <span id="mock-word-count">0</span> / 150 minimum</div>
+    `;
+}
+
+function showMockTask2() {
+    const mockContent = document.getElementById('mock-content');
+    mockContent.innerHTML = `
+        <div style="background: #fef3c7; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <h3 style="color: #1e3a8a; margin-bottom: 10px;">Task 2: Essay</h3>
+            <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 15px;">⏱️ 40 minutes | Minimum 250 words</p>
+            <p style="font-size: 1.1rem; line-height: 1.6;">
+                Some people think that environmental problems are too big for individuals to solve. 
+                Others believe that individuals can make a difference. 
+                Discuss both views and give your opinion.
+            </p>
+        </div>
+        <textarea id="mock-essay-input" placeholder="Start writing your Task 2 essay here..." oninput="updateMockWordCount()"></textarea>
+        <div class="word-count">Words: <span id="mock-word-count">0</span> / 250 minimum</div>
+    `;
+}
+
+function updateMockWordCount() {
+    const text = document.getElementById('mock-essay-input').value;
+    const count = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    document.getElementById('mock-word-count').innerText = count;
+}
+
+function confirmEndTest() {
+    if (confirm("Are you sure you want to end the mock test? Your progress will be saved.")) {
+        endMockTest();
+    }
+}
+
+function endMockTest() {
+    clearInterval(mockTestTimer);
+    
+    const task1Input = document.getElementById('mock-essay-input');
+    if (task1Input && currentMockTask === 1) {
+        mockTask1Text = task1Input.value;
+    } else if (task1Input && currentMockTask === 2) {
+        mockTask2Text = task1Input.value;
+    }
+    
+    const task1Words = mockTask1Text.trim() === '' ? 0 : mockTask1Text.trim().split(/\s+/).filter(w => w.length > 0).length;
+    const task2Words = mockTask2Text.trim() === '' ? 0 : mockTask2Text.trim().split(/\s+/).filter(w => w.length > 0).length;
+    
+    const minutes = Math.floor(mockTestTimeLeft / 60);
+    const seconds = mockTestTimeLeft % 60;
+    mockTestStoppedAt = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} remaining`;
+    
+    const results = {
+        date: new Date().toLocaleDateString(),
+        task1: { words: task1Words, text: mockTask1Text },
+        task2: { words: task2Words, text: mockTask2Text },
+        stoppedAt: mockTestStoppedAt,
+        completed: mockTestTimeLeft <= 0
+    };
+    
+    let mockResults = JSON.parse(localStorage.getItem('em_mock_results') || '[]');
+    mockResults.push(results);
+    localStorage.setItem('em_mock_results', JSON.stringify(mockResults));
+    
+    alert(`Mock Test Complete!\n\nTask 1: ${task1Words} words (minimum 150)\nTask 2: ${task2Words} words (minimum 250)\nStopped at: ${mockTestStoppedAt}\n\nResults saved to your history.`);
+    
+    mockTestMode = false;
+    goHome();
+}
+</script>
+</body>
+</html>
